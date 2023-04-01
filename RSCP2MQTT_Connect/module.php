@@ -176,7 +176,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['EMS'      ,153    ,100    ,'wallbox_all_power'					, 'TAG_EMS_POWER_WB_ALL'					, 'e3dc/wallbox/power'						, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
 			['EMS'      ,154    ,100    ,'wallbox_all_solar'					, 'TAG_EMS_POWER_WB_SOLAR'					, 'e3dc/wallbox/solarpower'					, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
 
-
 			// Battery
 			['HEADER'	,200	,0		,'BATTERY'								, ''										, ''										, ''				, 	''						,  1	, false, false],
 			['BAT'		,201	,200	,'battery_rsoc'							, 'TAG_BAT_RSOC'							, 'e3dc/battery/rsoc'						, VARIABLETYPE_FLOAT, 	'RSCP.SOC'				,  1	, false, true],
