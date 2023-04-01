@@ -173,6 +173,9 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['EMS'		,150	,100	,'ems_mode'								, 'TAG_EMS_MODE'							, 'e3dc/mode'								, VARIABLETYPE_INTEGER, 'RSCP.EMS.Mode'  		,  1	, false, true],
 			['EMS'		,151	,100	,'ems_coupling_mode'					, 'TAG_EMS_COUPLING_MODE'					, 'e3dc/coupling/mode'						, VARIABLETYPE_INTEGER, 'RSCP.Coupling.Mode' 	,  1	, false, true],
 			['EMS'		,152	,100	,'system_peak_power'					, 'TAG_EMS_INSTALLED_PEAK_POWER'			, 'e3dc/system/installed_peak_power'		, VARIABLETYPE_INTEGER, ''						,  1	, false, true],
+			['EMS'      ,153    ,100    ,'wallbox_all_power'					, 'TAG_EMS_POWER_WB_ALL'					, 'e3dc/wallbox/power'						, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
+			['EMS'      ,154    ,100    ,'wallbox_all_solar'					, 'TAG_EMS_POWER_WB_SOLAR'					, 'e3dc/wallbox/solarpower'					, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
+
 
 			// Battery
 			['HEADER'	,200	,0		,'BATTERY'								, ''										, ''										, ''				, 	''						,  1	, false, false],
