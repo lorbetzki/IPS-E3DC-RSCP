@@ -81,8 +81,8 @@
             "year_grid_energy_out " :  "Jahr - Netz Bezug",
             "year_autarky " :  "Jahr - Autarky",
             "year_consumed_production " :  "Jahr - Eigenverbrauch",
-            "wallbox_all_solar": "Wallbox Leistung",
-            "wallbox_all_power": "Wallbox Leistung Solar"
+            "wallbox_all_solar": "Wallbox Leistung Solar",
+            "wallbox_all_power": "Wallbox Leistung"
         }
     }
 }
