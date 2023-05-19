@@ -210,8 +210,18 @@ declare(strict_types=1);
 				IPS_SetVariableProfileValues("RSCP.Percent", 0, 100, 1);
 				IPS_SetVariableProfileText("RSCP.Percent", "", "%");
 			}
+			if (!IPS_VariableProfileExists('RSCP.Current.A')) {
+				IPS_CreateVariableProfile('RSCP.Current.A', 1);
+				IPS_SetVariableProfileIcon('RSCP.Current.A', '');
+				IPS_SetVariableProfileValues("RSCP.Current.A", 6, 32, 1);
+				IPS_SetVariableProfileText("RSCP.Current.A", "", " A");
+			}
+			if (!IPS_VariableProfileExists('RSCP.ChargePrio')) {
+				IPS_CreateVariableProfile('RSCP.ChargePrio', 0);
+				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 0, $this->Translate('wallbox first'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 1, $this->Translate('battery first'), "", 0xFFFFFF);
 
-
+			}
 		}
 
 		private function registerVariables()

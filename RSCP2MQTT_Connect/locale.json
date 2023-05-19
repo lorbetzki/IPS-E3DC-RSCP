@@ -81,8 +81,21 @@
             "year_grid_energy_out " :  "Jahr - Netz Bezug",
             "year_autarky " :  "Jahr - Autarky",
             "year_consumed_production " :  "Jahr - Eigenverbrauch",
-            "wallbox_all_solar": "Wallbox Leistung Solar",
-            "wallbox_all_power": "Wallbox Leistung"
+            "wb_all_solar": "Wallbox Leistung Solar",
+            "wb_all_power": "Wallbox Leistung",
+            "wb_battery_to_car_mode" : "Entladung der Hausbatterie durch Wallbox erlaubt",
+            "wb_battery_before_car_mode": "Wallbox Ladepriorität",
+            "wallbox first": "erst Wallbox",
+            "battery first": "erst Hausbatterie",
+            "wb_device_state": "",
+            "wb_pm_active_phases": "Aktive Phasen",
+            "wb_number_used_phases": "anzahl verwendeter Phasen",
+            "wb_max_current": "Wallbox Ladeleistung",
+            "wb_plugged": "Fahrzeug eingesteckt",
+            "wb_locked": "Ladeport verriegelt",
+            "wb_charging": "Fahrzeug lädt",
+            "wb_canceled": "Fahrzeug Ladung abgebrochen",
+            "wb_sun_mode": "Wallbox im Sonnenmodus"
         }
     }
 }

@@ -121,6 +121,52 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
+		public function set_wb_battery_to_car_mode(bool $value)
+		{
+			$Topic = 'e3dc/set/wallbox/battery_to_car_mode';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_wb_battery_before_car_mode(bool $value)
+		{
+			$Topic = 'e3dc/set/wallbox/battery_before_car_mode';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
+			$this->sendMQTT($Topic, $Payload);	
+		}
+		
+		public function set_wb_max_current(int $value)
+		{
+			$Topic = 'e3dc/set/wallbox/control';
+			$sun_mode = $this->ReadAttributeBoolean('wb_sun_mode');
+			if ($sun_mode){$mode = "solar";}else{$mode="mix";};
+			$Payload = strval($mode).':'.strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_wb_sun_mode(bool $value)
+		{
+			$Topic = 'e3dc/set/wallbox/control';
+			$wb_max_current = $this->ReadAttributeBoolean('wb_max_current');
+			if ($value){$mode = "stop";}else{exit;};
+			$Payload = strval($mode);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_wb_charging(bool $value)
+		{
+			$Topic = 'e3dc/set/wallbox/control';
+
+			$Payload = strval($mode).':'.strval($wb_max_current);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
 		public function RequestAction($Ident, $Value)
 		{
 			switch ($Ident){
@@ -139,7 +185,27 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 				case "ems_max_charge_power":
 					$this->set_max_charge_power($Value);
 					break;
+				
+				case "wb_battery_to_car_mode":
+						$this->set_wb_battery_to_car_mode($Value);
+				break;
+				
+				case "wb_battery_before_car_mode":
+					$this->set_wb_battery_before_car_mode($Value);
+				break;
+						
+				case "wb_max_current":
+					$this->set_wb_max_current($Value);
+				break;
 
+				case "wb_sun_mode":
+					$this->set_wb_sun_mode($Value);
+				break;
+
+				case "wb_charging":
+					$this->set_wb_charging($Value);
+				break;
+				
 				default:
 					throw new Exception("Invalid Ident");
 
@@ -173,8 +239,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['EMS'		,150	,100	,'ems_mode'								, 'TAG_EMS_MODE'							, 'e3dc/mode'								, VARIABLETYPE_INTEGER, 'RSCP.EMS.Mode'  		,  1	, false, true],
 			['EMS'		,151	,100	,'ems_coupling_mode'					, 'TAG_EMS_COUPLING_MODE'					, 'e3dc/coupling/mode'						, VARIABLETYPE_INTEGER, 'RSCP.Coupling.Mode' 	,  1	, false, true],
 			['EMS'		,152	,100	,'system_peak_power'					, 'TAG_EMS_INSTALLED_PEAK_POWER'			, 'e3dc/system/installed_peak_power'		, VARIABLETYPE_INTEGER, ''						,  1	, false, true],
-			['EMS'      ,153    ,100    ,'wallbox_all_power'					, 'TAG_EMS_POWER_WB_ALL'					, 'e3dc/wallbox/total/power'						, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
-			['EMS'      ,154    ,100    ,'wallbox_all_solar'					, 'TAG_EMS_POWER_WB_SOLAR'					, 'e3dc/wallbox/solar/power'					, VARIABLETYPE_FLOAT, 'RSCP.Power.W'			,  1    , false, false],
 
 			// Battery
 			['HEADER'	,200	,0		,'BATTERY'								, ''										, ''										, ''				, 	''						,  1	, false, false],
@@ -186,6 +250,22 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['HEADER'	,300	,0		,'PVI'									, ''										, ''										, ''				, 	''						,  1	, false, false],
 			['PVI'		,301	,300	,'pvi_power_string1'					, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
 			['PVI'		,302	,300	,'pvi_power_string2'					, 'TAG_PVI_DC_POWER'						, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, false],
+
+			// Wallbox
+			['HEADER'	,400	,0 		,'WALLBOX'								, ''										, ''										, ''				, 	''						,  1	, false, false],
+			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'					, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'	  		,  1    , false, false],
+			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'					, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, false],
+			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'				, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
+			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'			, 'e3dc/wallbox/battery_before_car'			, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
+			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'						, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'~Switch'				,  1    , false, false],
+			['WB'      ,406    ,400    ,'wb_pm_active_phases'					, 'TAG_WB_PM_ACTIVE_PHASES'					, 'e3dc/wallbox/active_phases'				, VARIABLETYPE_INTEGER, ''						,  1    , false, false],
+			['WB'      ,407    ,400    ,'wb_number_used_phases'					, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/number_used_phases'			, VARIABLETYPE_INTEGER, ''						,  1    , false, false],
+			['WB'      ,408    ,400    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true, false],
+			['WB'      ,409    ,400    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/plugged'					, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , false, false],
+			['WB'      ,410    ,400    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/locked'						, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , false, false],
+			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
+			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/canceled'					, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , false, false],
+			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
 
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''										, ''										, ''				, 	''						,  1	, false, false],
