@@ -95,7 +95,9 @@
             "wb_locked": "Ladeport verriegelt",
             "wb_charging": "Fahrzeug lädt",
             "wb_canceled": "Fahrzeug Ladung abgebrochen",
-            "wb_sun_mode": "Wallbox im Sonnenmodus"
+            "wb_sun_mode": "Wallbox im Sonnenmodus",
+            "yes": "Ja",
+            "no": "Nein"
         }
     }
 }
