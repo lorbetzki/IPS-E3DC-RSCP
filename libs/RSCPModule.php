@@ -220,7 +220,12 @@ declare(strict_types=1);
 				IPS_CreateVariableProfile('RSCP.ChargePrio', 0);
 				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 0, $this->Translate('wallbox first'), "", 0xFFFFFF);
 				IPS_SetVariableProfileAssociation("RSCP.ChargePrio", 1, $this->Translate('battery first'), "", 0xFFFFFF);
-
+			}
+		
+			if (!IPS_VariableProfileExists('RSCP.YesNo')) {
+				IPS_CreateVariableProfile('RSCP.YesNo', 0);
+				IPS_SetVariableProfileAssociation("RSCP.YesNo", 0, $this->Translate('no'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.YesNo", 1, $this->Translate('yes'), "", 0xFFFFFF);
 			}
 		}
 

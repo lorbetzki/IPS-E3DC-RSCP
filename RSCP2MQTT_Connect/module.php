@@ -123,7 +123,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_wb_battery_to_car_mode(bool $value)
 		{
-			$Topic = 'e3dc/set/wallbox/battery_to_car_mode';
+			$Topic = 'e3dc/set/wallbox/battery_to_car';
 			if ($value)
 				$Payload = '1';
 			else
@@ -133,7 +133,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_wb_battery_before_car_mode(bool $value)
 		{
-			$Topic = 'e3dc/set/wallbox/battery_before_car_mode';
+			$Topic = 'e3dc/set/wallbox/battery_before_car';
 			if ($value)
 				$Payload = '1';
 			else
@@ -144,8 +144,11 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_wb_max_current(int $value)
 		{
 			$Topic = 'e3dc/set/wallbox/control';
-			$sun_mode = $this->ReadAttributeBoolean('wb_sun_mode');
-			if ($sun_mode){$mode = "solar";}else{$mode="mix";};
+			$sun_mode = $this->GetValue('wb_sun_mode');
+			if ($sun_mode)
+				$mode = "solar";
+			else
+				$mode="mix";
 			$Payload = strval($mode).':'.strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
@@ -153,17 +156,24 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_wb_sun_mode(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/control';
-			$wb_max_current = $this->ReadAttributeBoolean('wb_max_current');
-			if ($value){$mode = "stop";}else{exit;};
-			$Payload = strval($mode);
+			$wb_max_current = $this->GetValue('wb_max_current');
+			if ($value)
+				$mode = "solar";
+			else
+				$mode="mix";
+			$Payload = strval($mode).":".strval($wb_max_current);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
 		public function set_wb_charging(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/control';
-
-			$Payload = strval($mode).':'.strval($wb_max_current);
+			$wb_max_current = $this->GetValue('wb_max_current');
+			if ($value)
+				$mode = "stop";
+			else
+				exit;
+			$Payload = strval($mode);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -255,7 +265,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''										, ''										, ''				, 	''						,  1	, false, false],
 			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'					, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'	  		,  1    , false, false],
 			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'					, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, false],
-			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'				, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
+			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'				, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'				,  1    , true, false],
 			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'			, 'e3dc/wallbox/battery_before_car'			, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , true, false],
 			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'						, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'~Switch'				,  1    , false, false],
 			['WB'      ,406    ,400    ,'wb_pm_active_phases'					, 'TAG_WB_PM_ACTIVE_PHASES'					, 'e3dc/wallbox/active_phases'				, VARIABLETYPE_INTEGER, ''						,  1    , false, false],
