@@ -177,6 +177,23 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
+		public function set_wb_battery_discharge_until(int $value)
+		{
+			$Topic = 'e3dc/set/wallbox/battery_discharge_until';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_wb_enforce_power_assignment(bool $value)
+		{
+			$Topic = 'e3dc/set/wallbox/enforce_power_assignment';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
 		public function RequestAction($Ident, $Value)
 		{
 			switch ($Ident){
@@ -214,6 +231,14 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 				case "wb_charging":
 					$this->set_wb_charging($Value);
+				break;
+
+				case "wb_battery_discharge_until":
+					$this->set_wb_battery_discharge_until($Value);
+				break;
+
+				case "wb_enforce_power_assignment":
+					$this->set_wb_enforce_power_assignment($Value);
 				break;
 				
 				default:
@@ -276,7 +301,9 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true, false],
 			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/canceled'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, false],
 			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'						, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true, false],
-
+			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'		, 'e3dc/wallbox/battery_discharge_until'	, VARIABLETYPE_FLOAT, 'RSCP.Percent'			,  1    , true, false],
+			['WB'      ,415    ,400    ,'wb_enforce_power_assignment'			, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/enforce_power_assignment'			, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' ,  1    , true, false],
+			
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''										, ''										, ''				, 	''						,  1	, false, false],
 			['DB'		,801	,800	,'today_solar_energy'					, 'TAG_DB_HISTORY_DATA_DAY'					, 'e3dc/solar/energy'						, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
