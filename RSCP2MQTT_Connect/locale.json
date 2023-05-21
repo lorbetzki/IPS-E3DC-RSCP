@@ -97,7 +97,9 @@
             "wb_canceled": "Fahrzeug Ladung abgebrochen",
             "wb_sun_mode": "Wallbox im Sonnenmodus",
             "yes": "Ja",
-            "no": "Nein"
+            "no": "Nein",
+            "wb_battery_discharge_until": "Entleerung des Hausakku durch Wallbox bis SOC",
+            "wb_enforce_power_assignment":"Entleerung des Hausakkus auch im Mischmodus erlauben?"
         }
     }
 }
