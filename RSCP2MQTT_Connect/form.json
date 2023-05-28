@@ -131,7 +131,7 @@
                     "type": "Button",
                     "label": "RenameVariables",
                     "onClick": "RSCP2MQTT_update_Variable_name($id);"
-                } 
+                }
             ]
         }
     ],

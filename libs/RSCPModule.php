@@ -124,7 +124,7 @@ declare(strict_types=1);
 			}
 			$this->SendDebug("Variabel_Reset", json_encode($Variables) ,0 );
 			IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-			IPS_ApplyChanges($this->InstanceID);
+			IPS_ApplyChanges($this->InstanceID);			
 			return;
 		}
 
@@ -324,6 +324,6 @@ declare(strict_types=1);
 				$last_error = error_get_last();
 				echo $last_error['message'];
 			}
-		}
+		}		
 	}	
 	
