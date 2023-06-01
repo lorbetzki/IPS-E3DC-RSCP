@@ -133,6 +133,16 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_wb_battery_before_car_mode(bool $value)
 		{
+			$wb_battery_to_car_mode = $this->GetValue('wb_battery_to_car_mode');
+			if (($value) and ($wb_battery_to_car_mode))
+			{
+					$this->set_wb_battery_to_car_mode(false);
+					IPS_SetDisabled($this->GetIDForIdent('wb_battery_to_car_mode'), true);
+			}
+			else
+			{
+					IPS_SetDisabled($this->GetIDForIdent('wb_battery_to_car_mode'), false);
+			}
 			$Topic = 'e3dc/set/wallbox/battery_before_car';
 			if ($value)
 				$Payload = '1';
