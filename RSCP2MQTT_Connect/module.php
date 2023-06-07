@@ -209,46 +209,57 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			switch ($Ident){
 				case "ems_power_limits_used":
 					$this->set_power_limits_mode($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 					break;
 
 				case "ems_wetaher_charge_active":
-					$this->set_weather_regulation($Value);
+					$this->set_weather_regulation($Value);					
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 					break;
 				
 				case "ems_max_discharge_power":
 					$this->set_max_discharge_power($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 					break;
 					
 				case "ems_max_charge_power":
 					$this->set_max_charge_power($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 					break;
 				
 				case "wb_battery_to_car_mode":
 						$this->set_wb_battery_to_car_mode($Value);
+						if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 				
 				case "wb_battery_before_car_mode":
-					$this->set_wb_battery_before_car_mode($Value);
+						$this->set_wb_battery_before_car_mode($Value);
+						if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 						
 				case "wb_max_current":
 					$this->set_wb_max_current($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 
 				case "wb_sun_mode":
 					$this->set_wb_sun_mode($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 
 				case "wb_charging":
 					$this->set_wb_charging($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 
 				case "wb_battery_discharge_until":
 					$this->set_wb_battery_discharge_until($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 
 				case "wb_disable_battery_at_mix_mode":
 					$this->set_wb_disable_battery_at_mix_mode($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
 				
 				default:

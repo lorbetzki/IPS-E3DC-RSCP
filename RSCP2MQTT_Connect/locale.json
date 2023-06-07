@@ -99,7 +99,8 @@
             "yes": "Ja",
             "no": "Nein",
             "wb_battery_discharge_until": "Entleerung des Hausakku durch Wallbox bis SOC",
-            "wb_disable_battery_at_mix_mode":"Entleerung des Hausakkus im Mischmodus verbieten?"
+            "wb_disable_battery_at_mix_mode":"Entleerung des Hausakkus im Mischmodus verbieten?",
+            "emulate state": "Status emulieren"
         }
     }
 }

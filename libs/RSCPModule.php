@@ -31,6 +31,8 @@ declare(strict_types=1);
 				];
         	}	
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
+			$this->RegisterPropertyBoolean('EmulateState', true);
+			
 			//$this->RegisterAttributeString('Variables', json_encode($Variables));
 			$this->SendDebug('Variablen_Create', json_encode($Variables), 0);
 			

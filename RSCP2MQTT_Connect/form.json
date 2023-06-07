@@ -110,6 +110,11 @@
                     "save": true
                 }
                     ]
+        },
+        {
+            "name": "EmulateState",
+            "type": "CheckBox",
+            "caption": "emulate state"
         }
         ],
     "actions": 
