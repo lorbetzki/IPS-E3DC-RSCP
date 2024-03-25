@@ -140,7 +140,25 @@
             "wb_battery_discharge_until": "Entleerung des Hausakku durch Wallbox bis SOC",
             "wb_disable_battery_at_mix_mode":"Entleerung des Hausakkus im Mischmodus verbieten?",
             "emulate state": "Status emulieren",
-            "create variables with namespace": "Variablen Name mit Namespace anlegen"
+            "create variables with namespace": "Variablen Name mit Namespace anlegen",
+            "wb_energy_all":"Wallbox Energie Gesamt",
+            "wb_last_energy_all":"Wallbox Energie Gesamt seit letzter Ladung",
+            "wb_energy_solar":"Wallbox Energie Solar",
+            "wb_last_energy_solar":"Wallbox Energie Solar seit letzter Ladung",
+            "wb_energy_l1":"Wallbox verwendete Energie Phase 1",
+            "wb_energy_l2":"Wallbox verwendete Energie Phase 2",
+            "wb_energy_l3":"Wallbox verwendete Energie Phase 3",
+            "wb_key_state":"Wallbox Status Schlüsselschalter",
+            "wb_phases_l1":"Wallbox Phase 1 aktiv",
+            "wb_phases_l2":"Wallbox Phase 2 aktiv",
+            "wb_phases_l3":"Wallbox Phase 3 aktiv",
+            "wb_all_power_l1":"Wallbox verwendete Energie Phase 1 Gesamt",
+            "wb_all_power_l2":"Wallbox verwendete Energie Phase 1 Gesamt",
+            "wb_all_power_l3":"Wallbox verwendete Energie Phase 1 Gesamt",
+            "wb_soc":"Wallbox SOC",
+            "today_add_energy":"Heute - Enerie zugefügt",
+            "yesterday_add_energy":"Gestern - Energie zugefügt"
+
         }
     }
 }

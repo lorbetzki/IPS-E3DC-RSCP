@@ -28,20 +28,12 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function activate_pvi_requests(bool $value)
 		{	
 			$Topic = 'e3dc/set/requests/pvi';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
 		public function activate_pm_request(bool $value)
 		{
 			$Topic = 'e3dc/set/requests/pm';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
@@ -90,20 +82,12 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_weather_regulation(bool $value)
 		{	
 			$Topic = 'e3dc/set/weather_regulation';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
 		public function set_power_limits_mode(bool $value)
 		{	
 			$Topic = 'e3dc/set/power_limits';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';
 			$this->sendMQTT($Topic, $Payload);
 		}
 
@@ -123,11 +107,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_wb_battery_to_car_mode(bool $value)
 		{
-			$Topic = 'e3dc/set/wallbox/battery_to_car';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';	
+			$Topic = 'e3dc/set/wallbox/discharge_battery_to_car';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -143,11 +123,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			{
 					IPS_SetDisabled($this->GetIDForIdent('wb_battery_to_car_mode'), false);
 			}
-			$Topic = 'e3dc/set/wallbox/battery_before_car';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';	
+			$Topic = 'e3dc/set/wallbox/charge_battery_before_car';	
 			$this->sendMQTT($Topic, $Payload);	
 		}
 		
@@ -189,7 +165,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_wb_battery_discharge_until(int $value)
 		{            
-			$Topic = 'e3dc/set/wallbox/battery_discharge_until';
+			$Topic = 'e3dc/set/wallbox/discharge_battery_until';
 			$Payload = strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
@@ -197,10 +173,6 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_wb_disable_battery_at_mix_mode(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/disable_battery_at_mix_mode';
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -373,23 +345,40 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 */
 			// Wallbox
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'	  		,  1    , false, true],
-			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
-			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/battery_to_car'				, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
-			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/battery_before_car'			, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true,  true],
+			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/total'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/power/solar'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/discharge_battery_to_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
+			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/charge_battery_before_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true,  true],
 			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'								, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1    , false, true],
-			['WB'      ,406    ,400    ,'wb_pm_active_phases'					, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/active_phases'				, VARIABLETYPE_INTEGER, ''						,  1    , false, true],
-			['WB'      ,407    ,400    ,'wb_number_used_phases'					, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/number_used_phases'			, VARIABLETYPE_INTEGER, ''						,  1    , false, true],
 			['WB'      ,408    ,400    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 			['WB'      ,409    ,400    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/plugged'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,410    ,400    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/locked'						, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/canceled'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
-			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/battery_discharge_until'	, VARIABLETYPE_INTEGER, 'RSCP.YesNo'			,  1    , true,  true],
+			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/discharge_battery_until'	, VARIABLETYPE_INTEGER, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,415    ,400    ,'wb_disable_battery_at_mix_mode'		, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/disable_battery_at_mix_mode', VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' 			,  1    , true,  true],
-			['WB'      ,416    ,400    ,'wb_number_phases'						, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , false, true],
+			['WB'      ,416    ,400    ,'wb_number_used_phases'					, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , false, true],
 			['WB'      ,417    ,400    ,'wb_index'								, 'TAG_WB_INDEX'									, 'e3dc/wallbox/index'						, VARIABLETYPE_INTEGER, ''						,  1    , true,  true],	
+
+			['WB'      ,418    ,400    ,'wb_energy_all'							, 'TAG_WB_ENERGY_ALL'								, 'e3dc/wallbox/energy/total'				, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,419    ,400    ,'wb_last_energy_all'					, 'IDX_WALLBOX_LAST_ENERGY_ALL'						, 'e3dc/wallbox/energy/last_charging/total'	, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,420    ,400    ,'wb_energy_solar'						, 'TAG_WB_ENERGY_SOLAR'								, 'e3dc/wallbox/energy/solar'				, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,421    ,400    ,'wb_last_energy_solar'					, 'IDX_WALLBOX_LAST_ENERGY_SOLAR'					, 'e3dc/wallbox/energy/last_charging/solar'	, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,422    ,400    ,'wb_energy_l1'							, 'TAG_WB_PM_ENERGY_L1'								, 'e3dc/wallbox/energy/L1'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,423    ,400    ,'wb_energy_l2'							, 'TAG_WB_PM_ENERGY_L2'								, 'e3dc/wallbox/energy/L2'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,424    ,400    ,'wb_energy_l3'							, 'TAG_WB_PM_ENERGY_L3'								, 'e3dc/wallbox/energy/L3'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+
+			['WB'      ,425    ,400    ,'wb_key_state'							, 'TAG_WB_KEY_STATE'								, 'e3dc/wallbox/key_state'					, VARIABLETYPE_BOOLEAN, '~Switch'			,  1    , false, true],
+			['WB'      ,426    ,400    ,'wb_phases_l1'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L1'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
+			['WB'      ,427    ,400    ,'wb_phases_l2'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L2'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
+			['WB'      ,428    ,400    ,'wb_phases_l3'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L3'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
+
+			['WB'      ,429    ,400    ,'wb_all_power_l1'						, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/L1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,430    ,400    ,'wb_all_power_l2'						, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/L2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,431    ,400    ,'wb_all_power_l3'						, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/L3'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,432    ,400    ,'wb_soc'								, 'TAG_WB_SOC'										, 'e3dc/wallbox/soc'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent'			,  1    , false, true],
+
 
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''												, ''										, ''				, 	''						,  1	, false, false],
