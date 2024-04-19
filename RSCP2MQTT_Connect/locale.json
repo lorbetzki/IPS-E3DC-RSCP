@@ -129,6 +129,7 @@
             "wb_device_state": "Status der Wallbox",
             "wb_pm_active_phases": "Aktive Phasen",
             "wb_number_used_phases": "anzahl verwendeter Phasen",
+            "wb_number_phases": "anzahl verwendeter Phasen",
             "wb_max_current": "Wallbox Ladeleistung",
             "wb_plugged": "Fahrzeug eingesteckt",
             "wb_locked": "Ladeport verriegelt",
