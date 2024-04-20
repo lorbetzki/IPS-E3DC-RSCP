@@ -28,12 +28,20 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function activate_pvi_requests(bool $value)
 		{	
 			$Topic = 'e3dc/set/requests/pvi';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
 		public function activate_pm_request(bool $value)
 		{
 			$Topic = 'e3dc/set/requests/pm';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);
 		}
 
@@ -82,12 +90,20 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_weather_regulation(bool $value)
 		{	
 			$Topic = 'e3dc/set/weather_regulation';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);
 		}
 
 		public function set_power_limits_mode(bool $value)
 		{	
 			$Topic = 'e3dc/set/power_limits';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);
 		}
 
@@ -108,6 +124,10 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_wb_battery_to_car_mode(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/discharge_battery_to_car';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -123,7 +143,11 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			{
 					IPS_SetDisabled($this->GetIDForIdent('wb_battery_to_car_mode'), false);
 			}
-			$Topic = 'e3dc/set/wallbox/charge_battery_before_car';	
+			$Topic = 'e3dc/set/wallbox/charge_battery_before_car';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';		
 			$this->sendMQTT($Topic, $Payload);	
 		}
 		
@@ -173,6 +197,10 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		public function set_wb_disable_battery_at_mix_mode(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/disable_battery_at_mix_mode';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';	
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
