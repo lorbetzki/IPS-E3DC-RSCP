@@ -158,8 +158,9 @@
             "wb_all_power_l3":"Wallbox verwendete Energie Phase 1 Gesamt",
             "wb_soc":"Wallbox SOC",
             "today_add_energy":"Heute - Enerie zugefügt",
-            "yesterday_add_energy":"Gestern - Energie zugefügt"
-
+            "yesterday_add_energy":"Gestern - Energie zugefügt",
+            "wb_energy_day_all":"Wallbox Energie Gesamt Heute",
+            "wb_energy_day_solar":"Wallbox Energie Solar Heute"
         }
     }
 }
