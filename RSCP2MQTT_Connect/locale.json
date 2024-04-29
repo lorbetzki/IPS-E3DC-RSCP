@@ -134,7 +134,7 @@
             "wb_plugged": "Fahrzeug eingesteckt",
             "wb_locked": "Ladeport verriegelt",
             "wb_charging": "Fahrzeug lädt",
-            "wb_canceled": "Fahrzeug Ladung abgebrochen",
+            "wb_canceled": "Fahrzeug Ladung pausiert",
             "wb_sun_mode": "Wallbox im Sonnenmodus",
             "yes": "Ja",
             "no": "Nein",

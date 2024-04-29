@@ -153,37 +153,37 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 		
 		public function set_wb_max_current(int $value)
 		{
-			$Topic = 'e3dc/set/wallbox/control';
+			$Topic = 'e3dc/set/wallbox/max_current';
 			$sun_mode = $this->GetValue('wb_sun_mode');
-			if ($sun_mode)
-				$mode = "solar";
+			if ($value)
+				$Payload = '1';
 			else
-				$mode="mix";
-			$Payload = strval($mode).':'.strval($value);
+				$Payload = '0';	
+			//$Payload = strval($mode).':'.strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
 		public function set_wb_sun_mode(bool $value)
 		{
-			$Topic = 'e3dc/set/wallbox/control';
-			$wb_max_current = $this->GetValue('wb_max_current');
+			$Topic = 'e3dc/set/wallbox/sun_mode';
+			//$wb_max_current = $this->GetValue('wb_max_current');
 			if ($value)
-				$mode = "solar";
+				$Payload = '1';
 			else
-				$mode="mix";
-			$Payload = strval($mode).":".strval($wb_max_current);
+				$Payload = '0';	
+			//$Payload = strval($mode).":".strval($wb_max_current);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
 		public function set_wb_charging(bool $value)
 		{
-			$Topic = 'e3dc/set/wallbox/control';
-			$wb_max_current = $this->GetValue('wb_max_current');
+			$Topic = 'e3dc/set/wallbox/toggle';
+			//$wb_max_current = $this->GetValue('wb_max_current');
 			if ($value)
-				$mode = "stop";
+				$Payload = '1';
 			else
-				exit;
-			$Payload = strval($mode);
+				$Payload = '0';	
+			//$Payload = strval($mode);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -382,7 +382,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,409    ,400    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/plugged'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,410    ,400    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/locked'						, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,411    ,400    ,'wb_charging'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/charging'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
-			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/canceled'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
+			['WB'      ,412    ,400    ,'wb_canceled'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/suspended'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/discharge_battery_until'	, VARIABLETYPE_INTEGER, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,415    ,400    ,'wb_disable_battery_at_mix_mode'		, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/disable_battery_at_mix_mode', VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' 			,  1    , true,  true],
