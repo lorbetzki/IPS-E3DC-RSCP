@@ -151,15 +151,11 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 		
-		public function set_wb_max_current(int $value)
+		public function set_wb_max_current(string $value)
 		{
 			$Topic = 'e3dc/set/wallbox/max_current';
-			$sun_mode = $this->GetValue('wb_sun_mode');
-			if ($value)
-				$Payload = '1';
-			else
-				$Payload = '0';	
-			//$Payload = strval($mode).':'.strval($value);
+			//$sun_mode = $this->GetValue('wb_sun_mode');
+			$Payload = strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -187,10 +183,10 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
-		public function set_wb_battery_discharge_until(int $value)
+		public function set_wb_battery_discharge_until(string $value)
 		{            
 			$Topic = 'e3dc/set/wallbox/discharge_battery_until';
-			$Payload = strval($value);
+			$Payload = intval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
@@ -331,8 +327,8 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			
 			// PVI
 			['HEADER'	,300	,0		,'PVI'									, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['PVI'		,301	,300	,'pvi_power_string1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
-			['PVI'		,302	,300	,'pvi_power_string2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
+			['PVI'		,301	,300	,'pvi_power_string_1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
+			['PVI'		,302	,300	,'pvi_power_string_2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT, 	'RSCP.Power.W' 			,  1	, false, true],
 			['PVI'		,303	,300	,'pvi_power_string_1'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_1'					, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
 			['PVI'		,304	,300	,'pvi_power_string_2'					, 'TAG_PVI_DC_POWER'								, 'e3dc/pvi/power/string_2'					, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
 			['PVI'		,305	,300	,'pvi_voltage_string_1'					, 'TAG_PVI_DC_VOLTAGE'								, 'e3dc/pvi/voltage/string_1'				, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
