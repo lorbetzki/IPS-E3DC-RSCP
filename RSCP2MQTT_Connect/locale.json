@@ -162,7 +162,7 @@
             "wb_energy_day_all":"Wallbox Energie Gesamt Heute",
             "wb_energy_day_solar":"Wallbox Energie Solar Heute",
             "RSCP2MQTT Version":"RSCP2MQTT Version",
-            "RSCP2MQTT Status":"RSCP2MQTT Version"
+            "RSCP2MQTT Status":"RSCP2MQTT Status"
         }
     }
 }
