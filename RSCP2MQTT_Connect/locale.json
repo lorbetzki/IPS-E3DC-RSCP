@@ -160,7 +160,9 @@
             "today_add_energy":"Heute - Enerie zugefügt",
             "yesterday_add_energy":"Gestern - Energie zugefügt",
             "wb_energy_day_all":"Wallbox Energie Gesamt Heute",
-            "wb_energy_day_solar":"Wallbox Energie Solar Heute"
+            "wb_energy_day_solar":"Wallbox Energie Solar Heute",
+            "RSCP2MQTT Version":"RSCP2MQTT Version",
+            "RSCP2MQTT Status":"RSCP2MQTT Version"
         }
     }
 }

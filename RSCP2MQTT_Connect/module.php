@@ -449,7 +449,9 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			// INFO
 			['HEADER'	,900	,0		,'INFO'		 							, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['INFO'		,901	,900	,'system_software'						, 'TAG_INFO_SW_RELEASE'								, 'e3dc/system/software'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-			
+			['INFO'		,902	,900	,'RSCP2MQTT Version'					, ''												, 'e3dc/rscp2mqtt/version'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+			['INFO'		,903	,900	,'RSCP2MQTT Status'						, ''												, 'e3dc/rscp2mqtt/status'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+
 		];
 	}	
 	
