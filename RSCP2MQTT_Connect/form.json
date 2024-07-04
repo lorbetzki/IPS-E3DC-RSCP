@@ -1,0 +1,145 @@
+{
+    "elements": [
+        {
+            "type": "Tree",
+            "name": "Variables",
+            "caption": "",
+            "add": false,
+            "delete": false,
+            "columns": [
+                {
+                    "caption": "Index",
+                    "name": "id",
+                    "width": "65px",
+                    "save": true
+                },
+                {
+                    "caption": "Parent",
+                    "name": "parent",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Namespace",
+                    "name": "Namespace",
+                    "width": "50px",
+                    "visible": false,
+                    "save": true
+                },
+                {
+                    "caption": "Ident",
+                    "name": "Ident",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Name",
+                    "name": "Name",
+                    "width": "auto",
+                    "save": true
+                },
+                                {
+                    "caption": "Tag",
+                    "name": "Tag",
+                    "width": "120px",
+                    "save": true
+                },
+                {
+                    "caption": "MQTT",
+                    "name": "MQTT",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Type",
+                    "name": "VarType",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Profile",
+                    "name": "Profile",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Faktor",
+                    "name": "Factor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Action",
+                    "name": "Action",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Active",
+                    "name": "Keep",
+                    "width": "75px",
+                    "edit": {
+                        "caption": "Active",
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "caption": "Color",
+                    "name": "rowColor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Edit",
+                    "name": "editable",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                }
+                    ]
+        },
+        {
+            "type": "CheckBox",
+            "name": "Name",
+            "caption": "create variables with namespace"
+        },
+        {
+            "name": "EmulateState",
+            "type": "CheckBox",
+            "caption": "emulate state"
+        }
+        ],
+    "actions": 
+    [
+        { 
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "Button",
+                    "label": "Refresh Variables",
+                    "onClick": "RSCP2MQTT_resetVariables($id);"
+                },
+                {
+                    "type": "Button",
+                    "label": "Sort Variables",
+                    "onClick": "RSCP2MQTT_update_Variable_position($id);"
+                } ,
+                {
+                    "type": "Button",
+                    "label": "RenameVariables",
+                    "onClick": "RSCP2MQTT_update_Variable_name($id);"
+                } 
+            ]
+        }
+    ],
+    "status": 
+    []
+}

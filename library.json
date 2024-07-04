@@ -1,0 +1,12 @@
+{
+    "id": "{C20C0811-0C07-F7CE-3F72-E99AAD0F5837}",
+    "name": "RSCP_Connect",
+    "author": "Philipp Hirzel, Kristian Lorbetzki",
+    "url": "https://github.com/lorbetzki/IPS-E3DC-RSCP.git",
+    "compatibility": {
+        "version": "6.0"
+    },
+    "version": "1.2.3",
+    "build": 20240429,
+    "date": 0
+}
