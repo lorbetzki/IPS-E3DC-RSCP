@@ -14,8 +14,7 @@ Die Nutzung des Moduls geschieht auf eigene Gefahr ohne Gewähr.
 
 ## 1. Funktionsumfang
 
-Mit diesem Modul kann man das E3DC Hauskraftwerk über das RSCP Protokoll steuern. Da für das RSCP Protokoll leider keine direkte Implementierung in PHP zur Verfügung steht, nutzt dieses Modul die von der RSCP2MQTT - Bridge (https://github.com/pvtom/rscp2mqtt) von PVTOM zur Verfügung gestellten MQTT-Topics zum empfangen und zum senden. RSCP2MQTT ist auf einem Raspbery PI lauffähig.
-Danke an dieser Stelle auch an PVTOM für die Implementierung der SET_POWER Befehle.
+Mit diesem Modul kann man das E3DC Hauskraftwerk über das RSCP Protokoll steuern. Da für das RSCP Protokoll leider keine direkte Implementierung in PHP zur Verfügung steht, nutzt dieses Modul die von der RSCP2MQTT - Bridge (https://github.com/pvtom/rscp2mqtt) von PVTOM zur Verfügung gestellten MQTT-Topics zum empfangen und zum senden. RSCP2MQTT ist bspw. auf einem Raspbery PI oder anderen Linuxfähigen Systemen lauffähig.
 
 Der Hauptaugenmerk liegt zu Beginn bei dem Modul auf der Steuerung des Hauskraftwerkes, da hier viel mehr Möglichkeiten zur Verfügung stehen im Vergleich zu der alternativ möglichen Anbindung über Modbus TCP.
 
@@ -23,6 +22,7 @@ Es werden aber nach und nach weitere Status Variablen/Werte integriert werden.
 
 ## 2. Systemanforderungen
 - IP-Symcon ab Version 6.0
+- lauffähige Version von [rscp2mqtt](https://github.com/pvtom/rscp2mqtt), die Installation und Einrichtung wird auf der Seite entsprechend erklärt.
 
 ## 3. Installation
 
@@ -32,25 +32,21 @@ Als Voraussetzung für die Nutzung diese Moduls muss die RSCP2MQTT - Bridge die 
 https://github.com/pvtom/rscp2mqtt/blob/main/README.md
 
 ### Erstellen der Modul-Instanz
-Die Modul Instanz RSCP2MQTT_Connect kann in der Verwaltungskonsole erstellt werden.
-
-### Einrichten der Modul-Instanz
-Nachdem eine Instanz des Moduls angelegt wurde, muss diese eingerichtet werden.
-
-Da das Modul die Werte direkt von dem MQTT Server als Parent erhält, sind keine weiteren Einstellungen für die Verbindung in der Modul Instanz notwendig.
+* Über den Module Store das 'Tibber'-Modul installieren.
+* Alternativ über das Module Control folgende URL hinzufügen https://github.com/lorbetzki/IPS-E3DC-RSCP.git
 
 ### Bestandteile der Instanz Konfiguration
 #### Auswahl Liste
 Für die möglichen Statusvariablen gibt es eine strutkurierte Auswahlliste in Baumstruktur, in der man Variablen, welche man benötigt, einfach auswählen kann kann. Sobald man eine Variable wieder deaktiviert, wird diese auch gelöscht! Also vorsichtig damit umgehen, um nicht geloggte Daten und Objektverweise zu verlieren
 
 #### Variablen Namen mit Namespace anlegen
-Mit dem Schlater kann man entscheiden ob die Variablen im Namen den Namespace vom jeweiligen Knoten (EMA, BATTERY, ...) im Text vorangestellt bekommen, um die Übersichtlichkeit zu verbessern.
+Mit dem Schalter kann man entscheiden ob die Variablen im Namen den Namespace vom jeweiligen Knoten (EMA, BATTERY, ...) im Text vorangestellt bekommen, um die Übersichtlichkeit zu verbessern.
 
 #### Button SORT VARIABLES
-Mit dieser Funktion werden die Sortierpositionen der Variablen gemäß der neuen vorgegebenen Deafult Liste aktualisiert.
+Mit dieser Funktion werden die Sortierpositionen der Variablen gemäß der neuen vorgegebenen Default Liste aktualisiert.
 
 #### Button RENAME VARIABLES
-Mit dieser Funktion werden die Variablen Namen gemäß der neuen Liste und Überstzung aktualisiert
+Mit dieser Funktion werden die Variablen Namen gemäß der neuen Liste und Übersetzung aktualisiert
 
 ## 4. Module
 
@@ -142,3 +138,4 @@ Dieser Befehl versetzt das Hauskraftwerk in den "NETZLADE" Mode, es wird in dem 
 Über den Parameter $value übergibt man die Ladeleistung in Watt. 
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 !! Hier wird aus dem NETZ geladen !!
+

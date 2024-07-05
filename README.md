@@ -14,9 +14,9 @@ Die Nutzung des Moduls geschieht auf eigene Gefahr ohne Gewähr. Es handelt sich
 4. [Module](#4-module)
 
 ## 1. Funktionsumfang
-Die E3DC-RSCP Library stellt aktuell 1 Modul zur verfügung mit denen das E3DC Hauskraftwerk über das RSCP Protokoll ausgelesen und gesteuert werden kann. Da für das RSCP Protokoll leider keine direkte Implementierung in PHP zur Verfügung steht, nutzt dieses Module das MQTT Protokoll um die Daten zu empfangen und zu senden.
+Die E3DC-RSCP Library stellt aktuell ein Modul zur verfügung mit dem das E3DC Hauskraftwerk über das RSCP Protokoll ausgelesen und gesteuert werden kann. Da für das RSCP Protokoll leider keine direkte Implementierung in PHP zur Verfügung steht, nutzt dieses Module das MQTT Protokoll um die Daten zu empfangen und zu senden.
 
-Hierzu wird immer eine zusätzliche Software benötigt, welche das RSCP Protokoll auf MQTT und umgekehrt umsetzt.
+Hierzu wird eine [zusätzliche](https://github.com/pvtom/rscp2mqtt) Software benötigt, welche das RSCP Protokoll auf MQTT und umgekehrt umsetzt.
 
 Einen genauen Funktionsumfang des jeweiligen Moduls und die benötigten Voraussetzungen wird in der Modul Readme detailiert beschrieben.
 

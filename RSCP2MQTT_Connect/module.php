@@ -209,6 +209,46 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
+		public function set_limit_charge(int $value)
+		{            
+			$Topic = 'e3dc/set/limit/charge/soc';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_limit_discharge(int $value)
+		{            
+			$Topic = 'e3dc/set/limit/discharge/soc';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_limit_discharge_durable(bool $value)
+		{            
+			$Topic = 'e3dc/set/limit/discharge/durable';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_limit_charge_durable(bool $value)
+		{            
+			$Topic = 'e3dc/set/limit/charge/soc';
+			if ($value)
+				$Payload = '1';
+			else
+				$Payload = '0';
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
+		public function set_limit_discharge_by_home_power(int $value)
+		{            
+			$Topic = 'e3dc/set/limit/discharge/by_home_power';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
 
 
 		public function RequestAction($Ident, $Value)
@@ -279,6 +319,27 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;	
 
+				case "lim_limit_charge":
+					$this->set_limit_charge($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+				case "lim_limit_discharge":
+					$this->set_limit_discharge($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+				case "lim_limit_charge_durable":
+					$this->set_limit_charge_durable($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+				case "lim_limit_discharge_durable":
+					$this->set_limit_discharge_durable($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+				case "lim_limit_discharge_by_home_power":
+					$this->set_limit_discharge_by_home_power($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;	
+
 				default:
 					throw new Exception("Invalid Ident");
 
@@ -332,7 +393,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['PVI'		,308	,300	,'pvi_current_string_2'					, 'TAG_PVI_DC_CURRENT'								, 'e3dc/pvi/current/string_2'				, VARIABLETYPE_FLOAT,	'~Ampere'				,  1	, false, true],
 			['PVI'		,309	,300	,'pvi_energy_all_string_1'				, 'TAG_PVI_DC_STRING_ENERGY_ALL'					, 'e3dc/pvi/energy_all/string_1'			, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
 			['PVI'		,310	,300	,'pvi_energy_all_string_2'				, 'TAG_PVI_DC_STRING_ENERGY_ALL'					, 'e3dc/pvi/energy_all/string_2'			, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-/*			['PVI'		,311	,300	,'pvi_power_L1'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L1'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
+			['PVI'		,311	,300	,'pvi_power_L1'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L1'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
 			['PVI'		,312	,300	,'pvi_power_L2'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L2'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
 			['PVI'		,313	,300	,'pvi_power_L3'							, 'TAG_PVI_AC_POWER'								, 'e3dc/pvi/power/L3'						, VARIABLETYPE_FLOAT,	'RSCP.Power.W'			,  1	, false, true],
 			['PVI'		,314	,300	,'pvi_voltage_L1'						, 'TAG_PVI_AC_VOLTAGE'								, 'e3dc/pvi/voltage/L1'						, VARIABLETYPE_FLOAT,	'~Volt'					,  1	, false, true],
@@ -347,21 +408,21 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['PVI'		,323	,300	,'pvi_reactive_power_L1'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L1'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
 			['PVI'		,324	,300	,'pvi_reactive_power_L2'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L2'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
 			['PVI'		,325	,300	,'pvi_reactive_power_L3'				, 'TAG_PVI_AC_REACTIVEPOWER'						, 'e3dc/pvi/reactive_power/L3'				, VARIABLETYPE_FLOAT,	'RSCP.Power.VAR'		,  1	, false, true],
-			['PVI'		,326	,300	,'pvi_energy_all_L1'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,327	,300	,'pvi_energy_all_L2'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,328	,300	,'pvi_energy_all_L3'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,329	,300	,'pvi_max_apparent_power_L1'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L1'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
-			['PVI'		,330	,300	,'pvi_max_apparent_power_L2'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L2'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
-			['PVI'		,331	,300	,'pvi_max_apparent_power_L3'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L3'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
-			['PVI'		,332	,300	,'pvi_energy_day_L1'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,333	,300	,'pvi_energy_day_L2'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,334	,300	,'pvi_energy_day_L3'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,335	,300	,'pvi_energy_grid_consumption_L1'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L1'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,336	,300	,'pvi_energy_grid_consumption_L2'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L2'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
-			['PVI'		,337	,300	,'pvi_energy_grid_consumption_L3'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L3'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,326	,300	,'pvi_energy_all_L1'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,327	,300	,'pvi_energy_all_L2'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,328	,300	,'pvi_energy_all_L3'					, 'TAG_PVI_AC_ENERGY_ALL'							, 'e3dc/pvi/energy_all/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,329	,300	,'pvi_max_apparent_power_L1'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L1'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+//			['PVI'		,330	,300	,'pvi_max_apparent_power_L2'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L2'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+//			['PVI'		,331	,300	,'pvi_max_apparent_power_L3'			, 'TAG_PVI_AC_MAX_APPARENTPOWER'					, 'e3dc/pvi/max_apparent_power/L3'			, VARIABLETYPE_FLOAT,	'RSCP.Power.VA'			,  1	, false, true],
+//			['PVI'		,332	,300	,'pvi_energy_day_L1'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L1'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,333	,300	,'pvi_energy_day_L2'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L2'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,334	,300	,'pvi_energy_day_L3'					, 'TAG_PVI_AC_ENERGY_DAY'							, 'e3dc/pvi/energy_day/L3'					, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,335	,300	,'pvi_energy_grid_consumption_L1'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L1'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,336	,300	,'pvi_energy_grid_consumption_L2'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L2'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
+//			['PVI'		,337	,300	,'pvi_energy_grid_consumption_L3'		, 'TAG_PVI_AC_ENERGY_GRID_CONSUMPTION'				, 'e3dc/pvi/energy_grid_consumption/L3'		, VARIABLETYPE_FLOAT,	'~Electricity.Wh'		,  1	, false, true],
 			['PVI'		,338	,300	,'pvi_frequency'						, 'TAG_PVI_AC_FREQUENCY'							, 'e3dc/pvi/frequency'						, VARIABLETYPE_FLOAT,	'~Hertz.50'				,  1	, false, true],
-			['PVI'		,340	,300	,'pvi_on_grid'							, 'TAG_PVI_DATA'									, 'e3dc/pvi/on_grid'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1	, false, true],
-*/
+//			['PVI'		,340	,300	,'pvi_on_grid'							, 'TAG_PVI_DATA'									, 'e3dc/pvi/on_grid'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1	, false, true],
+
 			// Wallbox
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/total'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
@@ -388,7 +449,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,423    ,400    ,'wb_energy_l2'							, 'TAG_WB_PM_ENERGY_L2'								, 'e3dc/wallbox/energy/L2'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
 			['WB'      ,424    ,400    ,'wb_energy_l3'							, 'TAG_WB_PM_ENERGY_L3'								, 'e3dc/wallbox/energy/L3'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
 
-			['WB'      ,425    ,400    ,'wb_key_state'							, 'TAG_WB_KEY_STATE'								, 'e3dc/wallbox/key_state'					, VARIABLETYPE_BOOLEAN, '~Switch'			,  1    , false, true],
+			['WB'      ,425    ,400    ,'wb_key_state'							, 'TAG_WB_KEY_STATE'								, 'e3dc/wallbox/key_state'					, VARIABLETYPE_BOOLEAN, '~Switch'				,  1    , false, true],
 			['WB'      ,426    ,400    ,'wb_phases_l1'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L1'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,427    ,400    ,'wb_phases_l2'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L2'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,428    ,400    ,'wb_phases_l3'							, 'TAG_WB_PM_ACTIVE_PHASES'							, 'e3dc/wallbox/phases/L3'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
@@ -400,6 +461,15 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 			['WB'      ,433    ,400    ,'wb_energy_day_all'						, 'IDX_WALLBOX_DAY_ENERGY_ALL'						, 'e3dc/wallbox/energy/day/total'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
 			['WB'      ,434    ,400    ,'wb_energy_day_solar'					, 'IDX_WALLBOX_DAY_ENERGY_SOLAR'					, 'e3dc/wallbox/energy/day/solar'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+
+			// settings
+			['HEADER'	,700	,0 		,'LIMITER'								, ''												, ''										, ''				, 	''						,  1	, false, false],
+			['LIM'       ,701    ,700    ,'lim_limit_charge'					, 'IDX_LIMIT_CHARGE_SOC'							, 'e3dc/limit/charge/soc'				, VARIABLETYPE_INTEGER, '~Intensity.100'		,  1    , true,  true],	
+			['LIM'       ,702    ,700    ,'lim_limit_discharge'					, 'IDX_LIMIT_DISCHARGE_SOC'							, 'e3dc/limit/discharge/soc'			, VARIABLETYPE_INTEGER, '~Intensity.100'		,  1    , true,  true],	
+			['LIM'       ,703    ,700    ,'lim_limit_charge_durable'			, 'IDX_LIMIT_CHARGE_DURABLE'						, 'e3dc/limit/charge/durable'			, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],	
+			['LIM'       ,704    ,700    ,'lim_limit_discharge_durable'			, 'IDX_LIMIT_DISCHARGE_DURABLE'						, 'e3dc/limit/discharge/durable'		, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],	
+			['LIM'       ,705    ,700    ,'lim_limit_discharge_by_home_power'	, 'IDX_LIMIT_DISCHARGE_BY_HOME_POWER'				, 'e3dc/limit/discharge/by_home_power'	, VARIABLETYPE_INTEGER, 'RSCP.Power.W.i'		,  1    , true,  true],	
+
 
 			// DATABASE VALUES
 			['HEADER'	,800	,0 		,'DATABASE'								, ''												, ''										, ''				, 	''						,  1	, false, false],
