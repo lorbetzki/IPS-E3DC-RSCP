@@ -235,7 +235,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 		public function set_limit_charge_durable(bool $value)
 		{            
-			$Topic = 'e3dc/set/limit/charge/soc';
+			$Topic = 'e3dc/set/limit/charge/durable';
 			if ($value)
 				$Payload = '1';
 			else
@@ -338,8 +338,16 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 				case "lim_limit_discharge_by_home_power":
 					$this->set_limit_discharge_by_home_power($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;
+				case "resetVariables":
+					$this->resetVariables();
 				break;	
-
+				case "update_Variable_position":
+					$this->update_Variable_position();
+				break;
+				case "update_Variable_name":
+					$this->update_Variable_name();
+				break;
 				default:
 					throw new Exception("Invalid Ident");
 
@@ -521,6 +529,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['INFO'		,901	,900	,'system_software'						, 'TAG_INFO_SW_RELEASE'								, 'e3dc/system/software'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 			['INFO'		,902	,900	,'RSCP2MQTT Version'					, ''												, 'e3dc/rscp2mqtt/version'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 			['INFO'		,903	,900	,'RSCP2MQTT Status'						, ''												, 'e3dc/rscp2mqtt/status'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+//			['INFO'		,904	,900	,'RSCP2MQTT BLABLA'						, ''												, ''					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 
 		];
 	}	

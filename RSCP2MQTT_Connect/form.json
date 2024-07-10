@@ -17,7 +17,7 @@
                     "caption": "Parent",
                     "name": "parent",
                     "visible": false,
-                    "width": "0px",
+                    "width": "100px",
                     "save": true
                 },
                 {
@@ -35,7 +35,7 @@
                     "save": true
                 },
                 {
-                    "caption": "Name",
+                    "caption": "Namespace",
                     "name": "Name",
                     "width": "auto",
                     "save": true
@@ -43,7 +43,7 @@
                                 {
                     "caption": "Tag",
                     "name": "Tag",
-                    "width": "120px",
+                    "width": "20%",
                     "save": true
                 },
                 {
@@ -89,22 +89,11 @@
                         "caption": "Active",
                         "type": "CheckBox"
                     }
-                },
-                {
-                    "caption": "Color",
-                    "name": "rowColor",
-                    "visible": false,
-                    "width": "0px",
-                    "save": true
-                },
-                {
-                    "caption": "Edit",
-                    "name": "editable",
-                    "visible": false,
-                    "width": "0px",
-                    "save": true
                 }
-                    ]
+                    ],
+
+                "values":[]
+
         },
         {
             "type": "CheckBox",
@@ -118,25 +107,31 @@
         }
         ],
     "actions": 
-    [
+    [                
+        {
+        "type": "Button",
+        "label": "force Update Variables",
+        "onClick": "RSCP2MQTT_force_update($id);"
+        },
         { 
             "type": "RowLayout",
             "items": [
                 {
                     "type": "Button",
-                    "label": "Refresh Variables",
-                    "onClick": "RSCP2MQTT_resetVariables($id);"
+                    "label": "Reset Variables",
+                    "onClick": "IPS_RequestAction($id, 'resetVariables', '');"
                 },
                 {
                     "type": "Button",
                     "label": "Sort Variables",
-                    "onClick": "RSCP2MQTT_update_Variable_position($id);"
+                    "onClick": "IPS_RequestAction($id, 'update_Variable_position', '');"
                 } ,
                 {
                     "type": "Button",
-                    "label": "RenameVariables",
-                    "onClick": "RSCP2MQTT_update_Variable_name($id);"
-                } 
+                    "label": "Rename Variables",
+                    "onClick": "IPS_RequestAction($id, 'update_Variable_name', '');"
+                }
+  
             ]
         }
     ],

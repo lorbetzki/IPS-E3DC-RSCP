@@ -28,14 +28,11 @@ require_once __DIR__ . '/Functions.php';
 					'Profile'      	=> $Variable[7],
 					'Factor'       	=> $Variable[8],
 					'Action'       	=> $Variable[9],
-					'Keep'         	=> $Variable[10],
-					'rowColor'     	=> $this->set_color($Variable[2]),
-					'editable'     	=> $this->set_editable($Variable[2])
+					'Keep'         	=> $Variable[10]
 				];
         	}	
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
-			//$this->RegisterAttributeString('Variables', json_encode($Variables));
-			$this->SendDebug('Variablen_Create', json_encode($Variables), 0);
+			$this->SendDebug(__FUNCTION__,json_encode($Variables),0);
 			
 		}
 
@@ -53,9 +50,8 @@ require_once __DIR__ . '/Functions.php';
 
 			$this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
 			
-
 			//Setze Filter für ReceiveData
-				$this->SetReceiveDataFilter('.*' . static::TOPIC . '.*');
+			$this->SetReceiveDataFilter('.*' . static::TOPIC . '.*');
 	
 			$this->registerProfiles();
 			$this->registerVariables();
@@ -103,21 +99,10 @@ require_once __DIR__ . '/Functions.php';
 			}
 		}
 
-		public function resetVariables()
+		protected function resetVariables()
 		{
-			$NewRows = static::$Variables;
-			$OldRows = json_decode($this->ReadPropertyString('Variables'), true);
-
 			$Variables = [];
-			foreach ($NewRows as $Pos => $Variable) {
-				// Get Keep Status
-				$keep = $Variable[10];
-				foreach ($OldRows as $Index => $Row) {
-					if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
-						$keep = $Row['Keep'];
-					}
-				}
-
+        	foreach (static::$Variables as $Pos => $Variable) {
 				$Variables[] = [
 					'id'          	=> $Variable[1],
 					'parent'		=> $Variable[2],
@@ -130,18 +115,15 @@ require_once __DIR__ . '/Functions.php';
 					'Profile'      	=> $Variable[7],
 					'Factor'       	=> $Variable[8],
 					'Action'       	=> $Variable[9],
-					'Keep'         	=> $keep,
-					'rowColor'     	=> $this->set_color($Variable[2]),
-					'editable'     	=> $this->set_editable($Variable[2])
+					'Keep'         	=> $Variable[10]
 				];
 			}
-			$this->SendDebug("Variabel_Reset", json_encode($Variables) ,0 );
-			IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-			IPS_ApplyChanges($this->InstanceID);
+			$this->SendDebug(__FUNCTION__, json_encode($Variables) ,0 );
+			$this->UpdateFormField('Variables', 'values', json_encode($Variables)); 
 			return;
 		}
 
-		public function update_Variable_position()
+		protected function update_Variable_position()
 		{
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $Variable) {
@@ -153,7 +135,7 @@ require_once __DIR__ . '/Functions.php';
 			}
 		}
 
-		public function update_Variable_name()
+		protected function update_Variable_name()
 		{
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $Variable) {
@@ -165,7 +147,38 @@ require_once __DIR__ . '/Functions.php';
 			}
 		}
 
+		public function GetConfigurationForm()
+		{
+			$jsonform = json_decode(file_get_contents(__DIR__."/../RSCP2MQTT_Connect/form.json"), true);
+			$this->SendDebug(__FUNCTION__,json_encode($jsonform),0);
 
+			// create Values for List dynamically
+			$ListValues = [];
+			foreach (static::$Variables as $Pos => $Variable) {
+				$id          	= $Variable[1];
+				$parent			= $Variable[2];
+				$Namespace	  	= $this->Translate($Variable[0]);
+				$Ident        	= str_replace(' ', '', $Variable[3]);
+				$Name         	= $this->Translate($Variable[3]);
+				$Tag		   	= $Variable[4];
+				$MQTT		   	= $Variable[5];
+				$VarType      	= $Variable[6];
+				$Profile      	= $Variable[7];
+				$Factor       	= $Variable[8];
+				$Action       	= $Variable[9];
+				$Keep        	= $Variable[10];
+
+				//$ListValues[] = ["id"=>"$id", "parent"=>"$parent", "Namespace"=>"$Namespace", "Ident"=>"$Ident", "Name"=>"$Name", "Tag"=>"$Tag", "MQTT"=>"$MQTT", "VarType"=>"$VarType", "Profile"=>"$Profile", "Factor"=>"$Factor", "Action"=>"$Action", "Keep"=>"$Keep", "rowColor"=>"$rowColor", "editable"=>"$editable" ];
+				$ListValues[] = ["id"=>"$id", "parent"=>"$parent", "Namespace"=>"$Namespace", "Ident"=>"$Ident", "Name"=>"$Name", "Tag"=>"$Tag", "MQTT"=>"$MQTT", "VarType"=>"$VarType", "Profile"=>"$Profile", "Factor"=>"$Factor", "Action"=>"$Action", "Keep"=>"$Keep"];
+
+			}
+				
+			$this->SendDebug(__FUNCTION__.' Write Values for List', json_encode($ListValues),0)	;
+
+			$jsonform["elements"][0]['values'] = $ListValues;
+
+			return json_encode($jsonform);
+		}
 
 		// Private & Protected Methods
 		private function registerProfiles()
@@ -262,78 +275,21 @@ require_once __DIR__ . '/Functions.php';
 			}
 
 		}
-
+		
 		private function registerVariables()
 		{
-
-			$NewRows = static::$Variables;
-			$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
+			$this->SendDebug(__FUNCTION__, $this->ReadPropertyString('Variables'), 0);
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 			foreach ($Variables as $pos => $Variable) {
-				if ($Variable['parent'] != 0 and $Variable['Keep']){
-					@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
-					if ($Variable['Action'] && $Variable['Keep']) {
-						$this->EnableAction($Variable['Ident']);
-					}	
+				@$this->MaintainVariable($Variable['Ident'], $Variable['Name'], $Variable['VarType'], $Variable['Profile'], $Variable['Pos'], $Variable['Keep']);
+				if ($Variable['Action'] && $Variable['Keep']) 
+				{
+					$this->EnableAction($Variable['Ident']);
 				}
-				 // Add Rowcolor and Editable to TREE -> they are not stored by the System
-					$Variables[$pos]['rowColor']  = $this->set_color($Variable['parent']);
-					$Variables[$pos]['editable']  = $this->set_editable($Variable['parent']);
-
-				foreach ($NewRows as $Index => $Row) {
-					if ($Variable['Ident'] == str_replace(' ', '', $Row[3])) {
-						unset($NewRows[$Index]);
-					}
-				}
-			}
+			}						
 			$this->SendDebug('Variablen_Reg_2_Color', json_encode($Variables), 0);
 
-			if (count($NewRows) != 0) {
-				foreach ($NewRows as $NewVariable) {
-					$Variables[] = [
-						'id'          	=> $NewVariable[1],
-						'parent'		=> $NewVariable[2],
-						'Namespace'	  	=> $this->Translate($NewVariable[0]),
-						'Ident'        	=> str_replace(' ', '', $NewVariable[3]),
-						'Name'         	=> $this->Translate($NewVariable[3]),
-						'Tag'		   	=> $NewVariable[4],
-						'MQTT'		   	=> $NewVariable[5],
-						'VarType'      	=> $NewVariable[6],
-						'Profile'      	=> $NewVariable[7],
-						'Factor'       	=> $NewVariable[8],
-						'Action'       	=> $NewVariable[9],
-						'Keep'         	=> $NewVariable[10],
-						'rowColor'     	=> $this->set_color($NewVariable[2]),
-						'editable'     	=> $this->set_editable($NewVariable[2])
-					];
-				}
-				IPS_SetProperty($this->InstanceID, 'Variables', json_encode($Variables));
-				$this->SendDebug('Variablen Register', json_encode($Variables), 0);
-				IPS_ApplyChanges($this->InstanceID);
-				return;
-        	}
 		}
-
-		private function set_color(int $parent)
-		{
-			if ($parent == 0){
-				return '#FFFFC0';
-			}
-			else{
-				return '';
-			}	
-		}
-
-		private function set_editable(int $parent)
-		{
-			if ($parent == 0){
-				return false;
-			}
-			else{
-				return true;
-			}	
-		}
-
 		private function set_name($ns , $name)
 		{
 			if ($this->ReadPropertyBoolean('Name')){
