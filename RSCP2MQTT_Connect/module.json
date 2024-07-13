@@ -3,7 +3,7 @@
     "name": "RSCP2MQTT_Connect",
     "type": 3,
     "vendor": "E3DC",
-    "aliases": [],
+    "aliases": ["RSCP2MQTT", "RSCP2MQTT_Connect", "RSCP2MQTT Connect"],
     "parentRequirements": [
         "{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"
     ],

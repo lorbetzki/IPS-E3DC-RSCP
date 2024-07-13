@@ -88,54 +88,103 @@ Im folgenden werden die verfügbaren Statusvariablen aufgelistet:
 
 #### 4.1.2. Funktionen
 
-#### force_update()
+#### RSCP2MQTT_force_update()
 Mit der Funktion sendet die RSCP2MQTT-Bridge für alle Werte die Daten. Somit auch für Variablen welche sich nicht geändert haben.
 
-#### set_refresh_interval(int $value)
-Diese Funktion ändert das Update-Intervall mit der die RSCP2MQTT-Bridge die Werte sendet. Es sind Werte zwischen 1 und 10 Sekunden möglich. Damit werden zu Laufzeit die in der Konfiguration der RSCP2MQTT-Bridge definierten Update Zeit.
+#### RSCP2MQTT_set_refresh_interval(int $value)
+Diese Funktion ändert das Update-Intervall mit der die RSCP2MQTT-Bridge die Werte sendet. Es sind Werte zwischen 1 und 10 Sekunden möglich. Damit wird zur Laufzeit die in der Konfiguration der RSCP2MQTT-Bridge definierte Update Zeit geändert.
 
-#### set_manual_charge(int $value)
+#### RSCP2MQTT_set_manual_charge(int $value)
 Mit dieser Funktion kann man eine manuelle Speicherladung starten. Es muss der Wert in Wh übergeben werden. Dieser kann in 100Wh Schritten erfolgen.
 
-#### set_weather_regulation(bool $value)
+#### RSCP2MQTT_set_weather_regulation(bool $value)
 Mit der Funktion kann man das Wetter geführte Laden aktivieren/deaktivieren
 
-#### set_power_limits_mode(bool $value)
-Die Funktion steuert ob die Lade-/Entladeleistung gesetzt werden können oder ob die Werte vom E3DC automatisch gesetzt werden.
-
-#### set_max_discharge_power(int $value)
+#### RSCP2MQTT_set_max_discharge_power(int $value)
 Mit dieser Funktion kann man den Wert für die Maximale Entladeleistung des Hauskraftwerkes in Watt setzen. Es können Werte in 100 Watt Schritten gesetzt werden. Der Höchstwert hängt vom vorhandenen Hauskraftwerk ab und muss dementsprechend gesetzt werden.
 
-#### set_max_charge_power(int $value)
+#### RSCP2MQTT_set_max_charge_power(int $value)
 Mit dieser Funktion kann man den Wert für die Maximale Entladeleistung des Hauskraftwerkes in Watt setzen. Es können Werte in 100 Watt Schritten gesetzt werden. Der Höchstwert hängt vom vorhandenen Hauskraftwerk ab und muss dementsprechend gesetzt werden.
 
 ### SET_POWER Funktionen
 Mit den SET_Power Funktionen kann man dass EMS direkt beeinflussen. Somit hat man alle Möglichkeiten das Lade/Entladeverhalten des Systems komplett selbst zu steuern. Mit diesen Befehlen werden keine Werte fix im Hauskraftwerk gesetzt, sondern die Werte von diesen Befehlen sind nur wenige Sekunden gültig und müssen daher zur Steuerung ständig wiederholt werden. Kommt nach ca 5 Sekunden nicht ein erneuter Wert, fällt das Hauskraftwerk wieder in seinen normnalen Modus zurück.
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.. Somit muss man nicht alle paar Sekunden den Befehl wiederholen, wenn man den Modus und die Leistungswerte nicht ändern will. Die Intervalldauer entspricht der im RSCP2MQTT eingestellten Intervallzeit.  Wenn die Intervalle von einem Befehl noch nicht abgelaufen sind, können diese mit einem neuen Befehl einfach überschrieben werden.
 
-!!!!! Mit diesen Befehlen muss man sehr behutsam umgehen, da damit auch evtl. Einspeise-Limits übersteuert werden können. Zusätzlich ist es möglich dass die Ladeleistung höher als die PV Leistung eingestellt wird, und somit auch Netzstrom in den Akku geladen wird. Das Verwenden der Befehle erflogt auf eigene Verantwortung !!! 
+!!! Mit diesen Befehlen muss man sehr behutsam umgehen, da damit auch evtl. Einspeise-Limits übersteuert werden können. Zusätzlich ist es möglich dass die Ladeleistung höher als die PV Leistung eingestellt wird, und somit auch Netzstrom in den Akku geladen wird. Das Verwenden der Befehle erfolgt auf eigene Verantwortung !!! 
 
-#### set_power_mode_auto()
+#### RSCP2MQTT_set_power_limits_mode(bool $value)
+Die Funktion steuert, ob die Lade-/Entladeleistung gesetzt werden können oder ob die Werte vom E3DC automatisch gesetzt werden.
+
+#### RSCP2MQTT_set_power_mode_auto()
 Der Befehl setzt das Hauskraftwerk in den Auto Modus zurück, so dass es wieder im "Normalen" Modus läuft.
 
-#### set_power_mode_idle(int $cycles)
+#### RSCP2MQTT_set_power_mode_idle(int $cycles)
 Dieser Befehl versetz das Hauskraftwerk in den "IDLE" Mode, es wird in dem Modus dann der Akku weder geladen noch entladen.
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 
-#### set_power_mode_discharge(int $value, int $cycles)
+#### RSCP2MQTT_set_power_mode_discharge(int $value, int $cycles)
 Dieser Befehl versetzt das Hauskraftwerk in den "ENTLADE" Mode, es wird in dem Modus, der Akku mit dem übergebenen Wert entladen.
 Über den Parameter $value übergibt man die Entladeleistung in Watt.
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 
-#### set_power_mode_charge(int $value, int $cycles)
+#### RSCP2MQTT_set_power_mode_charge(int $value, int $cycles)
 Dieser Befehl versetzt das Hauskraftwerk in den "LADE" Mode, es wird in dem Modus, der Akku mit dem übergebenen Wert geladen.
 Über den Parameter $value übergibt man die Ladeleistung in Watt. 
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 !! Hier können bei nicht reinen DC Systemen auch Werte übergeben werden, welche höher als die PV Leistung sind, und somit eine Netzladung auslösen!!
 
-#### set_power_mode_gridcharge(int $value, int $cycles)
+#### RSCP2MQTT_set_power_mode_gridcharge(int $value, int $cycles)
 Dieser Befehl versetzt das Hauskraftwerk in den "NETZLADE" Mode, es wird in dem Modus, der Akku mit dem übergebenen Wert aus dem Netz geladen.
 Über den Parameter $value übergibt man die Ladeleistung in Watt. 
 Über den Parameter $cycles kann man übergeben, für wie viele Intervalle () der Befehl wiederholt werden soll.
 !! Hier wird aus dem NETZ geladen !!
 
+
+### SET_WB Funktionen
+die set_wb befehle steuern die Wallboxen im System. Besitzt man mehrere Wallboxen muss man vorher mit set_wb_index() die passende ID (Zahlen von 0-9) vorgeben. Besitzt man nur eine, benötigt man dies nicht.
+
+#### RSCP2MQTT_set_wb_index(int $value)
+besitzt man mehr wie eine Wallbox muss mit dem Befehl die ID, eine Zahl zwischen 0-9, mitgegeben werden. Index 0 entspricht dabei die erste Wallbox
+
+#### RSCP2MQTT_set_wb_battery_to_car_mode(bool $value)
+hiermit wird die Entladung der Hausbatterie durch die Wallbox erlaubt. 
+
+#### RSCP2MQTT_set_wb_battery_before_car_mode(bool $value)
+setzt die Ladepriorität fest. Dabei bedeutet "true", das die Hausbatterie vorrang hat, false die Wallbox zuerst 
+
+#### RSCP2MQTT_set_wb_max_current(int $value)
+setzt die Wallbox Ladeleistung, zulässige Werte sind zwischen 6A und 32A in 1A Schritte.
+
+#### RSCP2MQTT_set_wb_sun_mode(bool $value)
+schaltet den Sonnenmodus für das Laden des Fahrzeuges ein
+
+#### RSCP2MQTT_set_wb_charging(bool $value)
+Zeigt an, ob das Fahrzeug lädt, ein senden von false während eines Ladevorgangs, unterbricht die Ladung.
+
+#### RSCP2MQTT_set_wb_battery_discharge_until(int $value)
+mittels dieser Funktion kann gesteuert werden, bis zum welchen SOC der Hausakku entleert werden darf
+
+#### RSCP2MQTT_set_wb_disable_battery_at_mix_mode(bool $value)
+Entleerung des Hausakkus im Mischmodus verbieten
+
+#### RSCP2MQTT_set_wb_number_of_phases(int $value)
+estimmten E3DC Wallboxen können hiermit die Anzahl der Phasen eingestellt werden. 
+
+#### RSCP2MQTT_set_limit_charge(int $value)
+setzt ein Ladelimit für den Hausakku in %, hilfreich wenn man im Urlaub ist und der Akku nicht auf 100% geladen werden muss. Bei einem tageswechsel wird dieser Wert zurückgesetzt. Sollte dies verhindern werden, so ist zusätzlich RSCP2MQTT_set_limit_charge_durable() zu verwenden.
+
+#### RSCP2MQTT_set_limit_discharge(int $value)
+setzt ein entladelimit für den Hausakku in %, hilfreich wenn man im Urlaub ist und der Akku nicht auf 0% entladen werden soll. Bei einem tageswechsel wird dieser Wert zurückgesetzt. Sollte dies verhindern werden, so ist zusätzlich RSCP2MQTT_set_limit_discharge_durable() zu verwenden.
+
+#### RSCP2MQTT_set_limit_discharge_durable(bool $value)
+true sorgt dafür, das bei einem Tagwechsel das gesetzte Entladelimit nicht zurückgesetzt wird.
+
+#### RSCP2MQTT_set_limit_charge_durable(bool $value)
+true sorgt dafür, das bei einem Tagwechsel das gesetzte Ladelimit nicht zurückgesetzt wird.
+
+#### RSCP2MQTT_set_limit_discharge_by_home_power(int $value)
+hiermit kann man festlegen, ab wieviel Watt Hausverbrauch nicht mehr der Hausakku entladen werden soll. Kann bspw benutzt werden, wenn man keine E3DC Wallbox hat und gerade ein Fahrzeug lädt. 
+
+
+#### RSCP2MQTT_activate_pvi_requests(bool $value)
+#### RSCP2MQTT_activate_pm_request(bool $value)
