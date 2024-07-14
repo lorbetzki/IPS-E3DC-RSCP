@@ -1,0 +1,16 @@
+{
+    "id": "{4B16C36C-71A9-5628-9022-B9FAFAFFE174}",
+    "name": "RSCP2MQTT Wallbox addon",
+    "type": 3,
+    "vendor": "E3DC",
+    "aliases": ["RSCP2MQTT_Wallbox addon","RSCP2MQTT Wallbox addon"],
+    "parentRequirements": [
+        "{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"
+    ],
+    "prefix": "RSCP2MQTTWB",
+    "url": ""
+}

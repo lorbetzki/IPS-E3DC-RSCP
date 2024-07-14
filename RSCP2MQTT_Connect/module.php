@@ -433,8 +433,8 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 			// Wallbox
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/total'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
-			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/power/solar'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
 			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/discharge_battery_to_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/charge_battery_before_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true,  true],
 			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'								, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1    , false, true],
@@ -468,7 +468,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,432    ,400    ,'wb_soc'								, 'TAG_WB_SOC'										, 'e3dc/wallbox/soc'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent'			,  1    , false, true],
 
 			['WB'      ,433    ,400    ,'wb_energy_day_all'						, 'IDX_WALLBOX_DAY_ENERGY_ALL'						, 'e3dc/wallbox/energy/day/total'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
-			['WB'      ,434    ,400    ,'wb_energy_day_solar'					, 'IDX_WALLBOX_DAY_ENERGY_SOLAR'					, 'e3dc/wallbox/energy/day/solar'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,434    ,400    ,'wb_energy_day_solar'					, 'IDX_WALLBOX_DAY_ENERGY_SOLAR'					, 'e3dc/wallbox/day/solar'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
 
 			// settings
 			['HEADER'	,700	,0 		,'LIMITER'								, ''												, ''										, ''				, 	''						,  1	, false, false],

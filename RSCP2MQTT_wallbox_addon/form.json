@@ -1,0 +1,119 @@
+{
+    "elements": [
+        {   "type": "NumberSpinner", 
+            "name": "Wallbox_Index", 
+            "caption": "Wallbox Index",
+            "minimum": 1,
+            "maximum": 9 
+        },
+        {
+            "type": "Tree",
+            "name": "Variables",
+            "caption": "",
+            "add": false,
+            "delete": false,
+            "columns": [
+                {
+                    "caption": "Index",
+                    "name": "id",
+                    "width": "65px",
+                    "save": true
+                },
+                {
+                    "caption": "Parent",
+                    "name": "parent",
+                    "visible": false,
+                    "width": "100px",
+                    "save": true
+                },
+                {
+                    "caption": "Namespace",
+                    "name": "Namespace",
+                    "width": "50px",
+                    "visible": false,
+                    "save": true
+                },
+                {
+                    "caption": "Ident",
+                    "name": "Ident",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Namespace",
+                    "name": "Name",
+                    "width": "auto",
+                    "save": true
+                },
+                                {
+                    "caption": "Tag",
+                    "name": "Tag",
+                    "width": "20%",
+                    "save": true
+                },
+                {
+                    "caption": "MQTT",
+                    "name": "MQTT",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Type",
+                    "name": "VarType",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Profile",
+                    "name": "Profile",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Faktor",
+                    "name": "Factor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Action",
+                    "name": "Action",
+                    "visible": false,
+                    "width": "0px",
+                    "save": true
+                },
+                {
+                    "caption": "Active",
+                    "name": "Keep",
+                    "width": "75px",
+                    "edit": {
+                        "caption": "Active",
+                        "type": "CheckBox"
+                    }
+                }
+                    ],
+
+                "values":[]
+        },
+        {
+            "name": "EmulateState",
+            "type": "CheckBox",
+            "caption": "emulate state"
+        }
+        ],
+    "actions": 
+    [                
+        {
+        "type": "Button",
+        "label": "force Update Variables",
+        "onClick": "echo $this->ReadPropertyString('Variables', json_encode($Variables));"
+        }
+    ],
+    "status": 
+    []
+}
