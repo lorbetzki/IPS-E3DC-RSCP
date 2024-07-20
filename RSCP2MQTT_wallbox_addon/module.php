@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 			$this->RegisterPropertyInteger('Wallbox_Index', 1);
 			$this->RegisterPropertyBoolean('EmulateState', true);
-
+			$WBIndex = $this->ReadPropertyInteger('Wallbox_Index');
 
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable)
@@ -61,11 +61,13 @@ declare(strict_types=1);
  			//Setze Filter für ReceiveData
 			$this->SetReceiveDataFilter('.*' . static::TOPIC . $WBIndex .'/.*');
 
-			define('WBIndex', $WBIndex);
+			$this->registerVariables();
 		}
 
 		public function ReceiveData($JSONString)
 		{
+			$WBIndex = $this->ReadPropertyInteger('Wallbox_Index');
+			
 			$this->SendDebug('JSON', $JSONString, 0);
         	if (!empty(static::TOPIC)) {
 
@@ -90,8 +92,11 @@ declare(strict_types=1);
 					$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 					foreach ($Variables as $Variable) {
 						if ($Variable['Keep']){
-							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
-								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
+							// create Var for User Wallbox ID
+							$VarMQTT = static::TOPIC.$WBIndex."/".$Variable['MQTT'];
+							
+							if (fnmatch($VarMQTT, $Buffer->Topic)) {
+								$this->SendDebug($VarMQTT, $Buffer->Payload, 0);
 								if ($Variable['Factor'] == 1){
 									$this->SetValue($Variable['Ident'], $Buffer->Payload); 
 								} 
@@ -110,6 +115,7 @@ declare(strict_types=1);
 			$jsonform = json_decode(file_get_contents(__DIR__."/../RSCP2MQTT_wallbox_addon/form.json"), true);
 			$this->SendDebug(__FUNCTION__,json_encode($jsonform),0);
 			$WBIndex = $this->ReadPropertyInteger('Wallbox_Index');
+			$this->SendDebug(__FUNCTION__,static::TOPIC.$WBIndex,0);
 
 			// create Values for List dynamically
 			$ListValues = [];
@@ -120,7 +126,7 @@ declare(strict_types=1);
 				$Ident        	= str_replace(' ', '', $Variable[3]);
 				$Name         	= $this->Translate($Variable[3]);
 				$Tag		   	= $Variable[4];
-				$MQTT		   	= static::TOPIC.$WBIndex."/".$Variable[5];
+				$MQTT		   	= $Variable[5];
 				$VarType      	= $Variable[6];
 				$Profile      	= $Variable[7];
 				$Factor       	= $Variable[8];
@@ -210,7 +216,22 @@ declare(strict_types=1);
 
 			}
 		}
-			
+		
+		private function registerVariables()
+		{
+			$this->SendDebug(__FUNCTION__, $this->ReadPropertyString('Variables'), 0);
+			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
+			foreach ($Variables as $pos => $Variable) {
+				@$this->MaintainVariable($Variable['Ident'], $Variable['Name'], $Variable['VarType'], $Variable['Profile'], $Variable['Pos'], $Variable['Keep']);
+				if ($Variable['Action'] && $Variable['Keep']) 
+				{
+					$this->EnableAction($Variable['Ident']);
+				}
+			}						
+			$this->SendDebug('Variablen_Reg_2_Color', json_encode($Variables), 0);
+
+		}
+		
 		// Mapping Definition für die MQTT Werte - RSCP2MQTT
 		public static $Variables = [
 		// 	NSPACE  	POS	 PARENT		IDENT									RSCP TAG 											MQTT Topic									Variablen Typ			Var Profil	  			Faktor  ACTION  KEEP
