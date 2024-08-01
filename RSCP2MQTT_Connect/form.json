@@ -4,6 +4,7 @@
             "type": "Tree",
             "name": "Variables",
             "caption": "",
+            "loadValuesFromConfiguration": false,
             "add": false,
             "delete": false,
             "columns": [
@@ -89,6 +90,20 @@
                         "caption": "Active",
                         "type": "CheckBox"
                     }
+                },
+                {
+                    "caption": "Color",
+                    "name": "rowColor",
+                    "visible": false,
+                    "width": "0px",
+                    "save": false
+                },
+                {
+                    "caption": "Edit",
+                    "name": "editable",
+                    "visible": false,
+                    "width": "0px",
+                    "save": false
                 }
                     ],
 
@@ -119,7 +134,8 @@
                 {
                     "type": "Button",
                     "label": "Reset Variables",
-                    "onClick": "IPS_RequestAction($id, 'resetVariables', '');"
+                    "onClick": "IPS_RequestAction($id, 'resetVariables', '');",
+                    "visible": false
                 },
                 {
                     "type": "Button",

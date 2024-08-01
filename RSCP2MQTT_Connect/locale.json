@@ -170,7 +170,13 @@
             "lim_limit_discharge":"Entladelimit Hausakku",
             "lim_limit_charge_durable":"dauerhaftes halten des Ladelimit Hausakku",
             "lim_limit_discharge_durable":"dauerhaftes halten des Entladelimit Hausakku",
-            "lim_limit_discharge_by_home_power":"Entladung des Hausakkus stoppen bei Hausverbrauch über x Watt"
-        }
+            "lim_limit_discharge_by_home_power":"Entladung des Hausakkus stoppen bei Hausverbrauch über x Watt",
+            "dcb_module_#_soc":"DCB Modul # SOC",
+            "dcb_module_#_soh":"DCB Modul # SOH",
+            "dcb_module_#_cycles":"DCB Modul # zyklen",
+            "dcb_module_#_current":"DCB Modul # Energie",
+            "dcb_module_#_manufacture_name":"DCB Modul # Hersteller",
+            "dcb_module_#_serialno":"DCB Modul # Seriennr."
+                    }
     }
 }

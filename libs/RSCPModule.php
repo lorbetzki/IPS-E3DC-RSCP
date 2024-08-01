@@ -14,6 +14,7 @@ require_once __DIR__ . '/Functions.php';
 			$this->RegisterPropertyBoolean('Name', false);
 			$this->RegisterPropertyBoolean('EmulateState', true);
 			
+			/*
 			$Variables = [];
         	foreach (static::$Variables as $Pos => $Variable) {
 				$Variables[] = [
@@ -30,9 +31,12 @@ require_once __DIR__ . '/Functions.php';
 					'Action'       	=> $Variable[9],
 					'Keep'         	=> $Variable[10]
 				];
-        	}	
+        	}
 			$this->RegisterPropertyString('Variables', json_encode($Variables));
 			$this->SendDebug(__FUNCTION__,json_encode($Variables),0);
+			
+				*/	
+			$this->RegisterPropertyString('Variables', '');
 			
 		}
 
@@ -81,9 +85,11 @@ require_once __DIR__ . '/Functions.php';
 				$this->SendDebug('MQTT Topic', $Buffer->Topic, 0);
 
 				if (property_exists($Buffer, 'Topic')) {
+					//$this->SendDebug('MQTT Variablen', $this->ReadPropertyString('Variables'), 0);
 					$Variables = json_decode($this->ReadPropertyString('Variables'), true);
 					foreach ($Variables as $Variable) {
-						if ($Variable['Keep']){
+						// Normal Topic Processing for static defined Variables
+						if ($Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
 							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
 								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
 								if ($Variable['Factor'] == 1){
@@ -93,12 +99,35 @@ require_once __DIR__ . '/Functions.php';
 									$this->SetValue($Variable['Ident'], $Buffer->Payload * $Variable['Factor']); 
 								}   	
 							} 
-						}  
-					}
-				}
+						}
+						// Battery Moduls Processing for delivered dynamic Index
+						elseif ($Variable['Keep'] and $Variable['Namespace'] == 'DCB'){
+							if (fnmatch( $Variable['MQTT'], $Buffer->Topic)) {
+								$this->SendDebug($Variable['MQTT'], $Buffer->Payload, 0);
+								// Create Ident & Name with dynamic Index from Provided Topic
+								$ident = substr_replace($Variable['Ident'], substr($Buffer->Topic, 17, 1), strpos($Variable['Ident'], '#') ,1);
+								$this->SendDebug('ident', $ident,  0);
+								$name  = substr_replace($Variable['Name'], substr($Buffer->Topic, 17, 1), strpos($Variable['Name'], '#') ,1);
+								$this->SendDebug('name', $name,  0);
+								$id	   = substr_replace(strval($Variable['id']), substr($Buffer->Topic, 17, 1), 2 ,1);
+								$this->SendDebug('id', $id,  0);
+								
+								@$this->MaintainVariable($ident, $this->set_name($Variable['Namespace'], $name ), $Variable['VarType'], $Variable['Profile'], $id , $Variable['Keep']);
+					
+								if ($Variable['Factor'] == 1){
+									$this->SetValue($ident, $Buffer->Payload); 
+								} 
+								else {
+									$this->SetValue($ident, $Buffer->Payload * $Variable['Factor']); 
+								}   	
+							} 
+						}   
 			}
 		}
+	}
+}
 
+/*
 		protected function resetVariables()
 		{
 			$Variables = [];
@@ -122,7 +151,7 @@ require_once __DIR__ . '/Functions.php';
 			$this->UpdateFormField('Variables', 'values', json_encode($Variables)); 
 			return;
 		}
-
+*/
 		protected function update_Variable_position()
 		{
 			$Variables = json_decode($this->ReadPropertyString('Variables'), true);
@@ -147,6 +176,8 @@ require_once __DIR__ . '/Functions.php';
 			}
 		}
 
+		// old form
+		/*
 		public function GetConfigurationForm()
 		{
 			$jsonform = json_decode(file_get_contents(__DIR__."/../RSCP2MQTT_Connect/form.json"), true);
@@ -178,6 +209,26 @@ require_once __DIR__ . '/Functions.php';
 			$jsonform["elements"][0]['values'] = $ListValues;
 
 			return json_encode($jsonform);
+		}
+ */
+		public function set_color(int $parent)
+		{
+			if ($parent == 0){
+				return '#FFFFC0';
+			}
+			else{
+				return '';
+			}	
+		}
+
+		public function set_editable(int $parent)
+		{
+			if ($parent == 0){
+				return false;
+			}
+			else{
+				return true;
+			}	
 		}
 
 		// Private & Protected Methods
@@ -276,6 +327,7 @@ require_once __DIR__ . '/Functions.php';
 
 		}
 		
+		/*
 		private function registerVariables()
 		{
 			$this->SendDebug(__FUNCTION__, $this->ReadPropertyString('Variables'), 0);
@@ -288,8 +340,27 @@ require_once __DIR__ . '/Functions.php';
 				}
 			}						
 			$this->SendDebug('Variablen_Reg_2_Color', json_encode($Variables), 0);
-
 		}
+*/
+
+		private function registerVariables()
+		{
+
+			//$NewRows = static::$Variables;
+			if ($this->ReadPropertyString('Variables') != ''){
+				$this->SendDebug('Variablen_Reg1', $this->ReadPropertyString('Variables'), 0);
+				$Variables = json_decode($this->ReadPropertyString('Variables'), true);
+				foreach ($Variables as $pos => $Variable) {
+					if ($Variable['parent'] != 0 and $Variable['Keep'] and $Variable['Namespace'] != 'DCB'){
+						@$this->MaintainVariable($Variable['Ident'], $this->set_name($Variable['Namespace'], $Variable['Name']), $Variable['VarType'], $Variable['Profile'], $Variable['id'], $Variable['Keep']);
+						if ($Variable['Action'] && $Variable['Keep']) {
+							$this->EnableAction($Variable['Ident']);
+						}	
+					}
+				}
+			}	
+		}
+
 		private function set_name($ns , $name)
 		{
 			if ($this->ReadPropertyBoolean('Name')){

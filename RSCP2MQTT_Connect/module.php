@@ -249,7 +249,50 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$Payload = strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
+		
+		// backported from https://github.com/Treasy79/IPS-E3DC-RSCP/blob/dev-newTreelogic/
+		public function GetConfigurationForm()
+		{
+			// Read FORM.JSON from directory to adjust Tree Values
+			$jsonform = json_decode(file_get_contents(__DIR__."/form.json"), true);
 
+			// Read actual Tree Property with the stored Data to transfer the Keep Status 
+			$StoredRows = json_decode($this->ReadPropertyString('Variables'), true);
+
+			$Variables_Form = [];
+			// Process the Static ARRAY with the Variable Definitions
+        	foreach (static::$Variables as $Pos => $Variable) {
+				// Get Keep Status of stored Dataset from selected Datasets by User
+				$keep = $Variable[10];
+				if ($this->ReadPropertyString('Variables') != '' ){
+					foreach ($StoredRows as $Index => $Row) {
+						if ($Variable[3] == str_replace(' ', '', $Row['Ident'])) {
+							$keep = $Row['Keep'];
+						}
+					}
+				}
+				$Variables_Form[] = [
+					'id'          	=> $Variable[1],
+					'parent'		=> $Variable[2],
+					'Namespace'	  	=> $this->Translate($Variable[0]),
+					'Ident'        	=> str_replace(' ', '', $Variable[3]),
+					'Name'         	=> $this->Translate($Variable[3]),
+					'Tag'		   	=> $Variable[4],
+					'MQTT'		   	=> $Variable[5],
+					'VarType'      	=> $Variable[6],
+					'Profile'      	=> $Variable[7],
+					'Factor'       	=> $Variable[8],
+					'Action'       	=> $Variable[9],
+					'Keep'         	=> $keep,
+					'rowColor'     	=> $this->set_color($Variable[2]),
+					'editable'     	=> $this->set_editable($Variable[2])
+				];
+        	}
+			// Update Tree Values in the respective Form Array	
+			$jsonform["elements"][0]["values"] = $Variables_Form;
+			$this->SendDebug('RSCP Form_post', json_encode($jsonform),0);
+			return json_encode($jsonform);
+		}
 
 		public function RequestAction($Ident, $Value)
 		{
@@ -529,7 +572,16 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['INFO'		,901	,900	,'system_software'						, 'TAG_INFO_SW_RELEASE'								, 'e3dc/system/software'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 			['INFO'		,902	,900	,'RSCP2MQTT Version'					, ''												, 'e3dc/rscp2mqtt/version'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 			['INFO'		,903	,900	,'RSCP2MQTT Status'						, ''												, 'e3dc/rscp2mqtt/status'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-//			['INFO'		,904	,900	,'RSCP2MQTT BLABLA'						, ''												, ''					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+
+			// BATTERY MODULS DC (# as Index for more Moduls)
+			// IDENT Colums must have the # as WIldcard for the index. MQTT must have the WIldcard Pattern [1-9] for the possible Index Numbers
+			['HEADER'	,10000	,0		,'BATTERY MODULS'		 				, ''												, ''										, ''				, 	''						,  1	, false, false],
+			['DCB'		,10001	,10000	,'dcb_module_#_soc'						, 'TAG_BAT_DCB_SOC' 								, 'e3dc/battery/dcb/[1-9]/soc'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
+			['DCB'		,10002	,10000	,'dcb_module_#_soh'						, 'TAG_BAT_DCB_SOH' 								, 'e3dc/battery/dcb/[1-9]/soh'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
+			['DCB'		,10003	,10000	,'dcb_module_#_cycles'					, 'TAG_BAT_DCB_CYCLE_COUNT'							, 'e3dc/battery/dcb/[1-9]/cycles'			, VARIABLETYPE_INTEGER,	''				  		,  1	, false, true],
+			['DCB'		,10004	,10000	,'dcb_module_#_current'					, 'TAG_BAT_DCB_CURRENT	'							, 'e3dc/battery/dcb/[1-9]/current'			, VARIABLETYPE_FLOAT,	'~Ampere'		  		,  1	, false, true],
+			['DCB'		,10050	,10000	,'dcb_module_#_manufacture_name'		, 'TAG_BAT_DCB_MANUFACTURE_NAME'					, 'e3dc/battery/dcb/[1-9]/manufacture_name'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
+			['DCB'		,10051	,10000	,'dcb_module_#_serialno'				, 'TAG_BAT_DCB_SERIALNO'							, 'e3dc/battery/dcb/[1-9]/serial_number2'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
 
 		];
 	}	
