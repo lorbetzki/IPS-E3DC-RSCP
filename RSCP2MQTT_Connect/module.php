@@ -158,6 +158,13 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
+		public function set_wb_min_current(int $value)
+		{
+			$Topic = 'e3dc/set/wallbox/min_current';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
 		public function set_wb_sun_mode(bool $value)
 		{
 			$Topic = 'e3dc/set/wallbox/sun_mode';
@@ -331,7 +338,10 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					$this->set_wb_max_current($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
-
+				case "wb_min_current":
+					$this->set_wb_min_current($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;
 				case "wb_sun_mode":
 					$this->set_wb_sun_mode($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
@@ -390,6 +400,9 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 				break;
 				case "update_Variable_name":
 					$this->update_Variable_name();
+				break;
+				case "show_forms":
+					print_r($this->ReadPropertyString('Variables'));
 				break;
 				default:
 					throw new Exception("Invalid Ident");
@@ -476,11 +489,12 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 
 			// Wallbox
 			['HEADER'	,400	,0 		,'WALLBOX'								, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
-			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,401    ,400    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'e3dc/wallbox/power/total'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
+			['WB'      ,402    ,400    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'e3dc/wallbox/power/solar'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
 			['WB'      ,403    ,400    ,'wb_battery_to_car_mode'				, 'TAG_EMS_BATTERY_TO_CAR_MODE'						, 'e3dc/wallbox/discharge_battery_to_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,404    ,400    ,'wb_battery_before_car_mode'			, 'TAG_EMS_BATTERY_BEFORE_CAR_MODE'					, 'e3dc/wallbox/charge_battery_before_car'	, VARIABLETYPE_BOOLEAN, 'RSCP.ChargePrio'		,  1    , true,  true],
 			['WB'      ,405    ,400    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'								, 'e3dc/wallbox/status'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1    , false, true],
+			['WB'      ,407    ,400    ,'wb_min_current'						, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/min_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 			['WB'      ,408    ,400    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 			['WB'      ,409    ,400    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/plugged'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 			['WB'      ,410    ,400    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/locked'						, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],

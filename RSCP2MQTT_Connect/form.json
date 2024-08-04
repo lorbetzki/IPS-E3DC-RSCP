@@ -106,8 +106,9 @@
                     "save": false
                 }
                     ],
-
-                "values":[]
+                "values":[
+                   
+                  ]
 
         },
         {
@@ -149,6 +150,11 @@
                 }
   
             ]
+        },
+        {
+            "type": "Button",
+            "label": "Show Forms",
+            "onClick": "IPS_RequestAction($id, 'show_forms', '');"
         }
     ],
     "status": 

@@ -154,6 +154,16 @@ declare(strict_types=1);
 			$this->sendMQTT($Topic, $Payload);	
 		}
 
+
+		public function set_wb_min_current(int $value)
+		{
+			$WBIndex = $this->ReadPropertyInteger('Wallbox_Index');
+
+			$Topic = 'e3dc/set/wallbox/'.$WBIndex.'/min_current';
+			$Payload = strval($value);
+			$this->sendMQTT($Topic, $Payload);	
+		}
+
 		public function set_wb_sun_mode(bool $value)
 		{
 			$WBIndex = $this->ReadPropertyInteger('Wallbox_Index');
@@ -195,7 +205,10 @@ declare(strict_types=1);
 					$this->set_wb_max_current($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;
-
+				case "wb_min_current":
+					$this->set_wb_min_current($Value);
+					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
+				break;
 				case "wb_sun_mode":
 					$this->set_wb_sun_mode($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
@@ -239,6 +252,7 @@ declare(strict_types=1);
 		['WB'      ,101    ,100    ,'wb_all_power'							, 'TAG_EMS_POWER_WB_ALL'							, 'total/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
 		['WB'      ,102    ,100    ,'wb_all_solar'							, 'TAG_EMS_POWER_WB_SOLAR'							, 'solar/power'				, VARIABLETYPE_FLOAT, 	'RSCP.Power.W'			,  1    , false, true],
 		['WB'      ,105    ,100    ,'wb_device_state'						, 'TAG_WB_DEVICE_STATE'								, 'status'						, VARIABLETYPE_BOOLEAN,	'RSCP.YesNo'			,  1    , false, true],
+		['WB'      ,107    ,100    ,'wb_min_current'						, 'TAG_WB_EXTERN_DATA'								, 'min_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 		['WB'      ,108    ,100    ,'wb_max_current'						, 'TAG_WB_EXTERN_DATA'								, 'max_current'				, VARIABLETYPE_INTEGER, 'RSCP.Current.A'		,  1    , true,  true],
 		['WB'      ,109    ,100    ,'wb_plugged'							, 'TAG_WB_EXTERN_DATA'								, 'plugged'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
 		['WB'      ,110    ,100    ,'wb_locked'								, 'TAG_WB_EXTERN_DATA'								, 'locked'						, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , false, true],
