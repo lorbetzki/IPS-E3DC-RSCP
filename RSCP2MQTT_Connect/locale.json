@@ -165,8 +165,8 @@
             "yesterday_add_energy":"Gestern - Energie zugefügt",
             "wb_energy_day_all":"Wallbox Energie Gesamt Heute",
             "wb_energy_day_solar":"Wallbox Energie Solar Heute",
-            "RSCP2MQTT Version":"RSCP2MQTT Version",
-            "RSCP2MQTT Status":"RSCP2MQTT Status",
+            "RSCP2MQTTVersion":"RSCP2MQTT Version",
+            "RSCP2MQTTStatus":"RSCP2MQTT Status",
             "lim_limit_charge":"Ladelimit Hausakku",
             "lim_limit_discharge":"Entladelimit Hausakku",
             "lim_limit_charge_durable":"dauerhaftes halten des Ladelimit Hausakku",
@@ -177,7 +177,17 @@
             "dcb_module_#_cycles":"DCB Modul # zyklen",
             "dcb_module_#_current":"DCB Modul # Energie",
             "dcb_module_#_manufacture_name":"DCB Modul # Hersteller",
-            "dcb_module_#_serialno":"DCB Modul # Seriennr."
-                    }
+            "dcb_module_#_serialno":"DCB Modul # Seriennr.",
+            "Block":"Sperre",
+            "Normal":"Normal",
+            "GO":"Freigabe",
+            "Force":"Anlauf",
+            "sgr_active":"SG Ready aktiv",
+            "sgr_state":"SG Ready Status",
+            "sgr_cooldown_end":"ende Cooldown",
+            "sgr_global_off":"SG Ready global ausgeschaltet",
+            "sgr_used_power":"Leistungsaufnahme"
+            
+        }
     }
 }

@@ -324,7 +324,15 @@ require_once __DIR__ . '/Functions.php';
 				IPS_SetVariableProfileValues("RSCP.Power.VAR", 0, 50000, 0 );
 				IPS_SetVariableProfileText("RSCP.Power.VAR", "", " VAR");
 			}
-
+			if (!IPS_VariableProfileExists('RSCP.SGState')) {
+				IPS_CreateVariableProfile('RSCP.SGState', 1);
+				IPS_SetVariableProfileValues("RSCP.SGState", 1, 4, 1);
+				IPS_SetVariableProfileAssociation("RSCP.SGState", 1, $this->Translate('Block'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.SGState", 2, $this->Translate('Normal'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.SGState", 3, $this->Translate('GO'), "", 0xFFFFFF);
+				IPS_SetVariableProfileAssociation("RSCP.SGState", 4, $this->Translate('Force'), "", 0xFFFFFF);
+			}
+			
 		}
 		
 		/*

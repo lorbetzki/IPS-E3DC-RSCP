@@ -256,7 +256,77 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			$Payload = strval($value);
 			$this->sendMQTT($Topic, $Payload);	
 		}
+
+		public function Migrate($JSONString) 
+		{
+            parent::Migrate($JSONString);
+            IPS_LogMessage("MIGRATE", $JSONString);
+
+			$this->SendDebug(__FUNCTION__, "look if something difference between the configs",0);
+
+			$Variables = json_decode($JSONString,true);
+			$UserConfig = $Variables['configuration']['Variables'];
+						
+			$NewConfig = $this->GetConfigDiff($UserConfig);
+
+			if(isset($NewConfig))
+			{
+				$this->SendDebug(__FUNCTION__, "new Configdata found",0);
+			}
+			else
+			{
+				$this->SendDebug(__FUNCTION__, "nothing to do!",0);
+			}
+
+			$j = json_decode($JSONString);
+            $JSONString = json_encode($j);
+
+            return $JSONString;
+        }
+
+		// function to get the difference between User and New Config
+		private function GetConfigDiff(string $UserConfig)
+		{
+			$this->SendDebug(__FUNCTION__, "Receive Userconfig ". $UserConfig,0);
+
+			$UserConfig = json_decode($UserConfig,true);
+
+			// let give us only the Idents, there are unique
+			$NewIdent = [];
+			foreach(static::$Variables as $key=>$value)
+			{
+				// remove headerrows
+				if ($value[2] == 0){continue;}
+				$NewIdent[] = $value[3];
+			}
+
+			// let give us only the Idents, there are unique
+			$UserIdent = [];
+			foreach($UserConfig as $key=>$value)
+			{
+				// remove headerrows
+				if ($value['parent'] == 0){continue;}
+				$UserIdent[] = $value['Ident'];
+			}
 		
+			// check the difference between user and new config
+			//$diff = array_diff($NewIdent, $UserIdent);
+			$diff = array_diff($NewIdent, $UserIdent);
+			
+			if (count($diff) != 0) 
+			{
+				$diff = json_encode(array_diff($NewIdent, $UserIdent));
+
+				$this->SendDebug(__FUNCTION__, "differences found ". $diff,0);
+				return $diff;
+			}
+			else
+			{
+				$this->SendDebug(__FUNCTION__, "no differences found ",0);
+				return;
+			}
+		}
+
 		// backported from https://github.com/Treasy79/IPS-E3DC-RSCP/blob/dev-newTreelogic/
 		public function GetConfigurationForm()
 		{
@@ -362,7 +432,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;	
 
-				case "wb_number_phases":
+				case "wb_number_used_phases":
 					$this->set_wb_number_of_phases($Value);
 					if ($this->ReadPropertyBoolean('EmulateState')){$this->SetValue($Ident, $Value);}
 				break;	
@@ -503,7 +573,7 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,413    ,400    ,'wb_sun_mode'							, 'TAG_WB_EXTERN_DATA'								, 'e3dc/wallbox/sun_mode'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'			,  1    , true,  true],
 			['WB'      ,414    ,400    ,'wb_battery_discharge_until'			, 'TAG_EMS_GET_WB_DISCHARGE_BAT_UNTIL'				, 'e3dc/wallbox/discharge_battery_until'	, VARIABLETYPE_INTEGER, '~Intensity.100'		,  1    , true,  true],
 			['WB'      ,415    ,400    ,'wb_disable_battery_at_mix_mode'		, 'TAG_EMS_GET_WALLBOX_ENFORCE_POWER_ASSIGNMENT'	, 'e3dc/wallbox/disable_battery_at_mix_mode', VARIABLETYPE_BOOLEAN, 'RSCP.YesNo' 			,  1    , true,  true],
-			['WB'      ,416    ,400    ,'wb_number_used_phases'					, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , false, true],
+			['WB'      ,416    ,400    ,'wb_number_used_phases'					, 'TAG_WB_NUMBER_PHASES'							, 'e3dc/wallbox/number_phases'				, VARIABLETYPE_INTEGER, 'RSCP.WB.Phases'		,  1    , true, true],
 			['WB'      ,417    ,400    ,'wb_index'								, 'TAG_WB_INDEX'									, 'e3dc/wallbox/index'						, VARIABLETYPE_INTEGER, ''						,  1    , true,  true],	
 
 			['WB'      ,418    ,400    ,'wb_energy_all'							, 'TAG_WB_ENERGY_ALL'								, 'e3dc/wallbox/energy/total'				, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
@@ -525,7 +595,25 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['WB'      ,432    ,400    ,'wb_soc'								, 'TAG_WB_SOC'										, 'e3dc/wallbox/soc'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent'			,  1    , false, true],
 
 			['WB'      ,433    ,400    ,'wb_energy_day_all'						, 'IDX_WALLBOX_DAY_ENERGY_ALL'						, 'e3dc/wallbox/energy/day/total'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
-			['WB'      ,434    ,400    ,'wb_energy_day_solar'					, 'IDX_WALLBOX_DAY_ENERGY_SOLAR'					, 'e3dc/wallbox/day/solar'			, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+			['WB'      ,434    ,400    ,'wb_energy_day_solar'					, 'IDX_WALLBOX_DAY_ENERGY_SOLAR'					, 'e3dc/wallbox/day/solar'					, VARIABLETYPE_FLOAT, '~Electricity.Wh'			,  1    , false,  true],	
+
+			['HEADER'	,500	,0		,'SG READY'		 				, ''												, ''										, ''				, 	''								,  1	, false, false],
+			['SGR'		,501	,500	,'sgr_active'							, 'TAG_SGR_AKTIV' 									, 'e3dc/sg_ready/1/active'					, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'  			,  1	, false, true],
+			['SGR'		,502	,500	,'sgr_state'							, 'TAG_SGR_STATE' 									, 'e3dc/sg_ready/1/status'					, VARIABLETYPE_INTEGER, 'RSCP.SGState'  		,  1	, false, true],
+			['SGR'		,503	,500	,'sgr_cooldown_end'						, 'TAG_SGR_COOLDOWN_END'							, 'e3dc/sg_ready/cooldown_end'				, VARIABLETYPE_INTEGER, ''  					,  1	, false, true],
+			['SGR'		,504	,500	,'sgr_global_off'						, 'TAG_SGR_GLOBAL_OFF'								, 'e3dc/sg_ready/global_off'				, VARIABLETYPE_BOOLEAN, 'RSCP.YesNo'  			,  1	, false, true],
+			['SGR'		,505	,500	,'sgr_used_power'						, 'TAG_SGR_USED_POWER' 								, 'e3dc/sg_ready/used_power'				, VARIABLETYPE_INTEGER, 'RSCP.SGState'  		,  1	, false, true],
+
+
+			// BATTERY MODULS DC (# as Index for more Moduls)
+			// IDENT Colums must have the # as WIldcard for the index. MQTT must have the WIldcard Pattern [1-9] for the possible Index Numbers
+			['HEADER'	,600	,0		,'BATTERY MODULS'		 				, ''												, ''										, ''				, 	''						,  1	, false, false],
+			['DCB'		,601	,600	,'dcb_module_#_soc'						, 'TAG_BAT_DCB_SOC' 								, 'e3dc/battery/dcb/[1-9]/soc'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
+			['DCB'		,602	,600	,'dcb_module_#_soh'						, 'TAG_BAT_DCB_SOH' 								, 'e3dc/battery/dcb/[1-9]/soh'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
+			['DCB'		,603	,600	,'dcb_module_#_cycles'					, 'TAG_BAT_DCB_CYCLE_COUNT'							, 'e3dc/battery/dcb/[1-9]/cycles'			, VARIABLETYPE_INTEGER,	''				  		,  1	, false, true],
+			['DCB'		,604	,600	,'dcb_module_#_current'					, 'TAG_BAT_DCB_CURRENT	'							, 'e3dc/battery/dcb/[1-9]/current'			, VARIABLETYPE_FLOAT,	'~Ampere'		  		,  1	, false, true],
+			['DCB'		,650	,600	,'dcb_module_#_manufacture_name'		, 'TAG_BAT_DCB_MANUFACTURE_NAME'					, 'e3dc/battery/dcb/[1-9]/manufacture_name'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
+			['DCB'		,651	,600	,'dcb_module_#_serialno'				, 'TAG_BAT_DCB_SERIALNO'							, 'e3dc/battery/dcb/[1-9]/serial_number2'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
 
 			// settings
 			['HEADER'	,700	,0 		,'LIMITER'								, ''												, ''										, ''				, 	''						,  1	, false, false],
@@ -580,22 +668,13 @@ require_once __DIR__ . '/../libs/RSCPModule.php';
 			['DB'		,847	,800	,'year_grid_energy_out'					, 'TAG_DB_HISTORY_DATA_YEAR'						, 'e3dc/year/grid/energy/out'				, VARIABLETYPE_FLOAT, 	'~Electricity' 			,  1	, false, true],
 			['DB'		,848	,800	,'year_autarky'							, 'TAG_DB_HISTORY_DATA_YEAR'						, 'e3dc/year/autarky'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
 			['DB'		,849	,800	,'year_consumed_production'				, 'TAG_DB_HISTORY_DATA_YEAR'						, 'e3dc/year/consumed'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
+		//	['DB'		,850	,800	,'year_consumed_production2'				, 'TAG_DB_HISTORY_DATA_YEAR'						, 'e3dc/year/consumed'						, VARIABLETYPE_FLOAT, 	'RSCP.Percent' 			,  1	, false, true],
 
 			// INFO
 			['HEADER'	,900	,0		,'INFO'		 							, ''												, ''										, ''				, 	''						,  1	, false, false],
 			['INFO'		,901	,900	,'system_software'						, 'TAG_INFO_SW_RELEASE'								, 'e3dc/system/software'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-			['INFO'		,902	,900	,'RSCP2MQTT Version'					, ''												, 'e3dc/rscp2mqtt/version'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-			['INFO'		,903	,900	,'RSCP2MQTT Status'						, ''												, 'e3dc/rscp2mqtt/status'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
-
-			// BATTERY MODULS DC (# as Index for more Moduls)
-			// IDENT Colums must have the # as WIldcard for the index. MQTT must have the WIldcard Pattern [1-9] for the possible Index Numbers
-			['HEADER'	,10000	,0		,'BATTERY MODULS'		 				, ''												, ''										, ''				, 	''						,  1	, false, false],
-			['DCB'		,10001	,10000	,'dcb_module_#_soc'						, 'TAG_BAT_DCB_SOC' 								, 'e3dc/battery/dcb/[1-9]/soc'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
-			['DCB'		,10002	,10000	,'dcb_module_#_soh'						, 'TAG_BAT_DCB_SOH' 								, 'e3dc/battery/dcb/[1-9]/soh'				, VARIABLETYPE_FLOAT, 	'RSCP.Percent'  		,  1	, false, true],
-			['DCB'		,10003	,10000	,'dcb_module_#_cycles'					, 'TAG_BAT_DCB_CYCLE_COUNT'							, 'e3dc/battery/dcb/[1-9]/cycles'			, VARIABLETYPE_INTEGER,	''				  		,  1	, false, true],
-			['DCB'		,10004	,10000	,'dcb_module_#_current'					, 'TAG_BAT_DCB_CURRENT	'							, 'e3dc/battery/dcb/[1-9]/current'			, VARIABLETYPE_FLOAT,	'~Ampere'		  		,  1	, false, true],
-			['DCB'		,10050	,10000	,'dcb_module_#_manufacture_name'		, 'TAG_BAT_DCB_MANUFACTURE_NAME'					, 'e3dc/battery/dcb/[1-9]/manufacture_name'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
-			['DCB'		,10051	,10000	,'dcb_module_#_serialno'				, 'TAG_BAT_DCB_SERIALNO'							, 'e3dc/battery/dcb/[1-9]/serial_number2'	, VARIABLETYPE_STRING,	''				  		,  1	, false, true],
+			['INFO'		,902	,900	,'RSCP2MQTTVersion'						, ''												, 'e3dc/rscp2mqtt/version'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
+			['INFO'		,903	,900	,'RSCP2MQTTStatus'						, ''												, 'e3dc/rscp2mqtt/status'					, VARIABLETYPE_STRING, 	''  		 			,  1	, false, true],
 
 		];
 	}	
